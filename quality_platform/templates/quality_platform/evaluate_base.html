@@ -1,0 +1,94 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'quality_platform/bs_main.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'quality_platform/button.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'quality_platform/bootstrap-table-master/dist/extensions/filter-control/bootstrap-table-filter-control.css' %}">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+    <script type="module" src="{% static 'quality_platform/bootstrap-table-master/src/extensions/filter-control/bootstrap-table-filter-control.js' %}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+
+
+
+    {% if title %}
+        <title>Quality Platform: Evaluation - {{ title }}</title>
+    {% else %}
+        <title>Quality Platform: Evaluation</title>
+    {% endif %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="{% url 'platform-home' %}">Quality Platform</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+              <a class="nav-item nav-link" href="{% url 'platform-home' %}">Home</a>
+              <a class="nav-item nav-link" href="{% url 'platform-evaluate' %}">Evaluation</a>
+            </div>
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+              <a class="nav-item nav-link" href="#">Login</a>
+              <a class="nav-item nav-link" href="#">Register</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Bar-->
+    <main role="main" class="container">
+      {% if title %}
+        <h1>Quality Platform: Evaluation {{ title }}</h1>
+      {% else %}
+        <h1>Quality Platform: Evaluation</h1>
+      {% endif %}
+      <div class="row">
+
+        <div class="col">
+          <button class="btn default" onclick="location.href='{% url 'platform-evaluate-upload-prediction' %}'" type="button">
+            With a prediction file</button>
+
+            <p>Upload your prediction file and the golden truth to evaluate your system</p>
+        </div>
+
+        <div class="col">
+          <button class="btn default">With a pretrain model</button>
+
+            <p>Upload your model, the data to predict and the golden truth to evaluate your system</p>
+        </div>
+
+      </div>
+      {% block content %}{% endblock %}
+    </main>
+
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "quality_platform/evaluate_base.html" %}
+{% block content %}
+    
+
+    <script>
+        var $table = $('#error-table');
+        var errordata = {{ error|safe }}
+        $(function () {
+            $('#error-table').bootstrapTable({
+                data: errordata
+            });
+        });
+    </script>
+
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-evaluate-report-prediction' %}">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-confusion' %}">Confusion Matrix</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-threshold' %}">Threshold Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'platform-eval-pred-report-error' %}">Error Analysis</a>
+        </li>
+    </ul>
+
+
+    <table id="error-table"
+           class="table table-striped table-condensed"
+           data-toolbar="#toolbar"
+           data-show-export="false"
+           data-search="true"
+           data-show-columns="true"
+           data-pagination="true"
+           data-page-size="100"
+           data-page-list="[100]"
+           data-sort-name="probability"
+           data-sort-order="desc"
+           data-cache="false"
+           data-filter-control="true"
+           data-show-toggle="true">
+        <thead>
+        <tr>
+            <th data-field="state" data-checkbox="true"></th>
+            <th data-field="id" data-align="center" data-sortable="true" data-filter-control="input">ID</th>
+            <th data-field="actual" data-align="center" data-filter-control="select">Actual Class</th>
+            <th data-field="predicted" data-align="center" data-filter-control="select">Predicted Class</th>
+            <th data-field="probability" data-align="left" data-sortable="true">Probability</th>
+            <th data-field="content" data-align="left" data-filter-control="input">Content</th>
+        </tr>
+        </thead>
+    </table>
+
+
+
+
+
+
+{% endblock content %}

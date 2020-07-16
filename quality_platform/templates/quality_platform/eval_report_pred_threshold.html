@@ -1,0 +1,73 @@
+{% extends "quality_platform/evaluate_base.html" %}
+{% block content %}
+
+     <script>
+         document.addEventListener('DOMContentLoaded', function () {
+             var myChart = Highcharts.chart('threshold_chart', {
+                 chart: {
+                     type: 'line'
+                 },
+                 title: {
+                     text: 'Threshold Analysis'
+                 },
+                 xAxis:{
+                     title: {
+                         text: 'Threshold'
+                     },
+                     categories: {{ threshold_list|safe }}
+                 },
+                 yAxis: {
+                     title: {
+                         text: 'Accuracy'
+                     }
+                     },
+                 series: [{
+                     data: {{ threshold_accuracy|safe }}
+                 }],
+             });
+         });
+     </script>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-evaluate-report-prediction' %}">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-confusion' %}">Confusion Matrix</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'platform-eval-pred-report-threshold' %}">Threshold Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-error' %}">Error Analysis</a>
+        </li>
+    </ul>
+
+
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Threshold</th>
+                <th>Total Instance</th>
+                <th>Proportion</th>
+                <th>Accuracy</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in threshold %}
+                <tr>
+                    {% for val in row %}
+                        <td>{{ val }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div id="threshold_chart" style="width:100%; height:400px;"></div>
+
+
+{% endblock content %}
