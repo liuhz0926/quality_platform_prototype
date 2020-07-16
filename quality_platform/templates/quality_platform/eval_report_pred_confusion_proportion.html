@@ -1,0 +1,33 @@
+{% extends "quality_platform/evaluate_base.html" %}
+{% load static %}
+{% block content %}
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-evaluate-report-prediction' %}">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'platform-eval-pred-report-confusion' %}">Confusion Matrix</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-threshold' %}">Threshold Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-error' %}">Error Analysis</a>
+        </li>
+    </ul>
+
+
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-confusion' %}">Count</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'platform-eval-pred-report-confusion-proportion' %}">Percentage</a>
+        </li>
+    </ul>
+
+    <img src="{% static "confusion_matrix_proportion.png" %}" alt="Confusion Matrix"/>
+
+
+{% endblock content %}
