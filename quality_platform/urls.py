@@ -17,5 +17,7 @@ urlpatterns = [
          name='platform-eval-pred-report-threshold'),
     path('evaluate/report-prediction/error_analysis', views.eval_pred_report_error,
          name='platform-eval-pred-report-error'),
+    path('evaluate/report-prediction/upload_new', views.eval_pred_report_upload,
+         name='platform-eval-pred-report-upload'),
 ]
 

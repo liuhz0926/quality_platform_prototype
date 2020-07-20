@@ -129,3 +129,14 @@ def eval_pred_report_error(request):
     context = {'title': 'Report with a Prediction File'}
     context['error'] = EVAL_REPORT.error
     return render(request, 'quality_platform/eval_report_pred_error.html', context)
+
+def eval_pred_report_upload(request):
+    '''
+
+    :param request:
+    :return:
+    '''
+    context = {'title': 'Report with a Prediction File'}
+
+    return render(request, 'quality_platform/eval_report_upload_new.html', context)
+

@@ -20,33 +20,4 @@
     </ul>
 
 
-    <div class="container">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>&nbsp</th>
-                <th>Precision</th>
-                <th>Recall</th>
-                <th>F1-score</th>
-                <th>Support</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for row in evaluation %}
-                <tr>
-                    {% for val in row %}
-                        <td>{{ val }}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        <h5>Total instance is {{ total_instance }}, and for each class:</h5>
-        {% for instance in instance_per_class %}
-            <h6>{{ instance }}</h6>
-        {% endfor %}
-    </div>
-
-
 {% endblock content %}
