@@ -1,9 +1,10 @@
 {% extends "quality_platform/evaluate_base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" href="{% url 'platform-evaluate-report-prediction' %}">Overview</a>
+            <a class="nav-link" href="{% url 'platform-evaluate-report-prediction' %}">Overview</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'platform-eval-pred-report-confusion' %}">Confusion Matrix</a>
@@ -15,9 +16,19 @@
             <a class="nav-link" href="{% url 'platform-eval-pred-report-error' %}">Error Analysis</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-pred-report-upload' %}">Upload another predicted file</a>
+            <a class="nav-link active" href="{% url 'platform-eval-pred-report-upload' %}">Upload another predicted file</a>
         </li>
     </ul>
+
+    <div class="row">
+        <div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit">Submit another prediction file</button>
+            </form>
+        </div>
+    </div>
 
 
 {% endblock content %}

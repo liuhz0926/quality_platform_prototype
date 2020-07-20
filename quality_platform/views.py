@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 import pandas as pd
 import numpy as np
-from .forms import EvalFileForm
-from .models import EvalPredFile
+from .forms import EvalFileForm, EvalAddFileForm
+from .models import EvalPredFile, EvalAddFile
 from .backend.Main import Eval_Report
 
 
@@ -51,13 +51,20 @@ def eval_upload_prediction(request):
     return render(request, 'quality_platform/eval_upload_prediction.html', context)
 
 
-def load_backend():
+def load_backend(addition = False):
     home_address = '/Users/liuhz0926/Django_project/GitHub/quality_platform_prototype/'
 
     # get the last uploaded files
     uploaded_files = EvalPredFile.objects.last()
     truth_file = home_address + uploaded_files.truth_file.url
     prediction_file = home_address + uploaded_files.prediction_file.url
+
+    if addition:
+        addition_files = EvalAddFile.objects.last()
+        add_pred_file = home_address + addition_files.addition_pred_file.url
+        print("Here is the new add_pred_file", add_pred_file)
+
+    # NEED TO UPDATE
 
     # set the report
     global EVAL_REPORT
@@ -137,6 +144,19 @@ def eval_pred_report_upload(request):
     :return:
     '''
     context = {'title': 'Report with a Prediction File'}
+
+    if request.method == 'POST':
+        form = EvalAddFileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            # Evaluate the model
+            load_backend(addition = True)
+            return redirect('platform-evaluate-report-prediction')
+
+    else: # if request is get
+        form = EvalAddFileForm()
+        context['form'] = form
 
     return render(request, 'quality_platform/eval_report_upload_new.html', context)
 
