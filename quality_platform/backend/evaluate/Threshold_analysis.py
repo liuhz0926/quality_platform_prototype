@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve,roc_auc_score,accuracy_score
 
 class Threshold_analysis:
-    def __init__(self,tfile, pfile, r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
+    def __init__(self,tfile, pfile, pfile1 = None,r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
                                                     # result/class column, p_col stands for column of probablity
         if tfile[-3:] == "tsv":
             self.td = '\t' #td means delimeter for tfile
@@ -22,15 +22,23 @@ class Threshold_analysis:
             return
         self.tfile = pd.read_csv(tfile,sep=self.td,header=None)
         self.pfile = pd.read_csv(pfile,sep=self.pd,header=None)
+        self.two_model = False
+        if pfile1:
+            self.pfile1 = pd.read_csv(pfile1,sep=self.pd,header=None)
+            self.two_model = True
         self.r_col = r_col
         self.p_col = p_col
 
     def generate_theshold(self):
-        data = pd.concat([self.tfile.iloc[:,self.r_col],self.pfile.iloc[:, self.r_col],self.pfile.iloc[:, self.p_col]],axis=1)
+        if self.two_model:
+            data = pd.concat([self.tfile.iloc[:,self.r_col],self.pfile.iloc[:, self.r_col],self.pfile.iloc[:, self.p_col],self.pfile1.iloc[:, self.r_col],self.pfile1.iloc[:, self.p_col]],axis=1)
+        else:
+            data = pd.concat([self.tfile.iloc[:,self.r_col],self.pfile.iloc[:, self.r_col],self.pfile.iloc[:, self.p_col]],axis=1)
         total = len(data.index)
         result = []
         threshold_list = []
         accuracy_list = []
+        accuracy_list1 = []
         column = self.tfile.iloc[:,self.r_col]
         labels = column.value_counts().keys()
         labels = int(1/len(labels)*100)
@@ -47,6 +55,14 @@ class Threshold_analysis:
             accuracy = accuracy_score(temp.iloc[:,0],temp.iloc[:,1])
             threshold_list.append(threshold)
             accuracy_list.append(round(accuracy, 3))
+            if self.two_model:
+                temp1 = data[data.iloc[:, 4] > i / 100]
+                instance1 = len(temp1.index)
+                percent1 = len(temp1.index)/total*100
+                accuracy1 = accuracy_score(temp1.iloc[:,0],temp1.iloc[:,3])
+                accuracy_list.append(round(accuracy1,3))
+                result.append([threshold, instance, instance1, round(percent, 3), round(percent1, 3),round(accuracy, 3), round(accuracy1,3)])
+                return result, threshold_list, accuracy_list,accuracy_list1
             result.append([threshold, instance, round(percent, 3), round(accuracy, 3)])
             # result.append("Threshold at "+str(i/100)+": total instance = "+ str(len(temp.index)) + " ("+str(round(percent, 3))+"%), accuracy = " + str(round(accuracy, 3)))
         #print(result)
