@@ -1,7 +1,91 @@
 {% extends "quality_platform/evaluate_base.html" %}
 {% block content %}
 
-     <script>
+
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-evaluate-report-prediction' %}">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-confusion' %}">Confusion Matrix</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'platform-eval-pred-report-threshold' %}">Threshold Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-error' %}">Error Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'platform-eval-pred-report-upload' %}">Upload another predicted file</a>
+        </li>
+    </ul>
+
+
+    {% if add_threshold_accuracy == null %}
+        <div id="threshold_chart" style="width:100%; height:400px;"></div>
+
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Threshold</th>
+                    <th>Total Instance</th>
+                    <th>Proportion</th>
+                    <th>Accuracy</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in threshold %}
+                    <tr>
+                        {% for val in row %}
+                            <td>{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+
+    {% else %}
+        <div id="threshold_chart_compared" style="width:100%; height:400px;"></div>
+
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th rowspan="2">Threshold</th>
+                    <th colspan="2">Total Instance</th>
+                    <th colspan="2">Proportion</th>
+                    <th colspan="2">Accuracy</th>
+                </tr>
+                <tr>
+                    <th>Model 1</th>
+                    <th>Model 2</th>
+                                        <th>Model 1</th>
+                    <th>Model 2</th>
+                    <th>Model 1</th>
+                    <th>Model 2</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in threshold %}
+                    <tr>
+                        {% for val in row %}
+                            <td>{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+    {% endif %}
+
+    <script>
          document.addEventListener('DOMContentLoaded', function () {
              var myChart = Highcharts.chart('threshold_chart', {
                  chart: {
@@ -59,85 +143,5 @@
 
 
     </script>
-
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-evaluate-report-prediction' %}">Overview</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-pred-report-confusion' %}">Confusion Matrix</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="{% url 'platform-eval-pred-report-threshold' %}">Threshold Analysis</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-pred-report-error' %}">Error Analysis</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-pred-report-upload' %}">Upload another predicted file</a>
-        </li>
-    </ul>
-
-
-    {% if add_threshold_accuracy == null %}
-        <div class="container">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Threshold</th>
-                    <th>Total Instance</th>
-                    <th>Proportion</th>
-                    <th>Accuracy</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for row in threshold %}
-                    <tr>
-                        {% for val in row %}
-                            <td>{{ val }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div id="threshold_chart" style="width:100%; height:400px;"></div>
-
-    {% else %}
-        <div class="container">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th rowspan="2">Threshold</th>
-                    <th colspan="2">Total Instance</th>
-                    <th colspan="2">Proportion</th>
-                    <th colspan="2">Accuracy</th>
-                </tr>
-                <tr>
-                    <th>Model 1</th>
-                    <th>Model 2</th>
-                                        <th>Model 1</th>
-                    <th>Model 2</th>
-                    <th>Model 1</th>
-                    <th>Model 2</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for row in threshold %}
-                    <tr>
-                        {% for val in row %}
-                            <td>{{ val }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div id="threshold_chart_compared" style="width:100%; height:400px;"></div>
-    {% endif %}
-
-
 
 {% endblock content %}

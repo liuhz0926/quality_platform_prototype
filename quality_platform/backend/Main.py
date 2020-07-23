@@ -8,29 +8,63 @@ from .evaluate.Error_analysis import Error_analysis
 
 class Eval_Report:
     def __init__(self):
+        # Overview properties
         self.total_instance = None
         self.evaluate_table = None
         self.instance_class = None
+
+        # Confusion Matrix properties
+        self.confusion_labels = None
+        self.confusion_data = None
+        self.normal_labels = None
+        self.normal_data = None
+
+        # Threshold Analysis properties
         self.threshold = None
         self.threshold_accuracy = None
         self.threshold_list = None
+
+        # Error Analysis Properties
         self.error = None
+
+        # Upload another predict file properties
         self.add_total_instance = None
         self.add_evaluate_table = None
         self.add_instance_class = None
+        self.add_confusion_labels = None
+        self.add_confusion_data = None
+        self.add_normal_labels = None
+        self.add_normal_data = None
         self.add_threshold_accuracy = None
 
 
     def load_report(self, truth_file, prediction_file, add_pred_file = None):
         # overview page and confusion matrix
-        self.total_instance, self.evaluate_table, self.instance_class = \
-            self.load_overview(truth_file, prediction_file)
+        overview_list, confusion_list = self.load_overview(truth_file, prediction_file)
+        self.total_instance = overview_list[0]
+        self.evaluate_table = overview_list[1]
+        self.instance_class = overview_list[2]
+        self.confusion_labels = confusion_list[0]
+        self.confusion_data = confusion_list[1]
+        self.normal_labels = confusion_list[2]
+        self.normal_data = confusion_list[3]
+
+
         self.load_threshold(truth_file, prediction_file, add_pred_file)
         self.load_error(truth_file, prediction_file)
         if add_pred_file != None:
-            self.add_total_instance, self.add_evaluate_table, self.add_instance_class = \
-                self.load_overview(truth_file, add_pred_file)
+            add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file)
+            self.add_total_instance = add_overview_list[0]
+            self.add_evaluate_table = add_overview_list[1]
+            self.add_instance_class = add_overview_list[2]
+            self.add_confusion_labels = add_confusion_list[0]
+            self.add_confusion_data = add_confusion_list[1]
+            self.add_normal_labels = add_confusion_list[2]
+            self.add_normal_data = add_confusion_list[3]
+
         return
+
+
 
     def load_overview(self, truth_file, prediction_file):
         '''
@@ -44,11 +78,14 @@ class Eval_Report:
         eval_dict = overview.evaluation()
         evaluate_table = make_eval_table(eval_dict, total_instance)
         instance_class = overview.instance_per_class('Truth')
+        overview_list = [total_instance, evaluate_table, instance_class]
 
         # make confusion matrix
-        overview.confusion_matrix()
+        confusion_labels, confusion_data = overview.confusion_matrix()
+        normal_labels, normal_data = overview.confusion_matrix(normalize=True)
+        confusion_list = [confusion_labels, confusion_data, normal_labels, normal_data]
 
-        return total_instance, evaluate_table, instance_class
+        return overview_list, confusion_list
 
     def load_threshold(self, truth_file, prediction_file, add_pred_file = None):
         '''

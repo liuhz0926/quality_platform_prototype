@@ -53,7 +53,7 @@ class Overview:
     def confusion_matrix(self,normalize=False):
         actual = self.tfile.iloc[:,self.r_col]
         predict = self.pfile.iloc[:,self.r_col]
-        labels = actual.unique()
+        labels = list(actual.unique())
         cm = confusion_matrix(actual,predict,labels=labels)
         result = []
         if normalize:
@@ -65,7 +65,9 @@ class Overview:
             for i in range(len(cm)):
                 for j in range(len(cm[i])):
                     result.append([j, i, cm[i][j]])
-        return labels,result
+
+        return labels, result
+
     def evaluation(self):
         actual = self.tfile.iloc[:, self.r_col]
         predict = self.pfile.iloc[:, self.r_col]

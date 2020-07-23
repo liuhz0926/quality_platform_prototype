@@ -30,7 +30,176 @@
         </li>
     </ul>
 
-    <img src="{% static "confusion_matrix_raw.png" %}" alt="Confusion Matrix"/>
+    <div class="container">
+        <h4 style="text-align: center">Confusion Matrix in Counts</h4>
+
+        <figure class="highcharts-figure">
+
+            <div id="confusion_matrix" style="width:100%; height:400px;"></div>
+
+            <script>
+                function getPointCategoryName(point, dimension) {
+                    var series = point.series,
+                        isY = dimension === 'y',
+                        axis = series[isY ? 'yAxis' : 'xAxis'];
+                    return axis.categories[point[isY ? 'y' : 'x']];
+                }
+                Highcharts.chart('confusion_matrix', {
+                    chart: {
+                        type: 'heatmap',
+                        marginTop: 40,
+                        marginBottom: 80,
+                        plotBorderWidth: 1
+                    },
+                    title: {
+                        text: 'Model 1'
+                    },
+                    xAxis: {
+                        categories: {{ confusion_labels|safe }},
+                        title: 'Predicted Label'
+                    },
+                    yAxis: {
+                        categories: {{ confusion_labels|safe }},
+                        title: 'True Label',
+                        reversed: true
+                    },
+                    colorAxis: {
+                        min: 0,
+                        minColor: '#FFFFFF',
+                        maxColor: Highcharts.getOptions().colors[0]
+                    },
+                    legend: {
+                        align: 'right',
+                        layout: 'vertical',
+                        margin: 0,
+                        verticalAlign: 'top',
+                        y: 25,
+                        symbolHeight: 280
+                    },
+
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + getPointCategoryName(this.point, 'x') + '</b> is predicted as <br><b>' + getPointCategoryName(this.point, 'y') +'</b> for <br><b>' +
+                                this.point.value + '</b> times<br><b>' + '</b>';
+                        }
+                        },
+
+                    series: [{
+                        name: 'confusion matrix',
+                        borderWidth: 1,
+                        data: {{ confusion_data }},
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000'
+                        }
+                    }],
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxWidth: 500
+                            },
+                            chartOptions: {
+                                yAxis: {
+                                    labels: {
+                                        formatter: function () {
+                                            return this.value.charAt(0);
+                                        }
+                                    }
+                                }
+                            }
+                        }]
+                    }
+                });
+            </script>
+
+            {% if add_confusion_labels != null %}
+                <div id="add_confusion_matrix" style="width:100%; height:400px;"></div>
+
+                <script>
+                    function getPointCategoryName(point, dimension) {
+                        var series = point.series,
+                            isY = dimension === 'y',
+                            axis = series[isY ? 'yAxis' : 'xAxis'];
+                        return axis.categories[point[isY ? 'y' : 'x']];
+                    }
+                    Highcharts.chart('add_confusion_matrix', {
+                        chart: {
+                            type: 'heatmap',
+                            marginTop: 40,
+                            marginBottom: 80,
+                            plotBorderWidth: 1
+                        },
+                        title: {
+                            text: 'Model 2'
+                        },
+                        xAxis: {
+                            categories: {{ add_confusion_labels|safe }},
+                            title: 'Predicted Label'
+                        },
+                        yAxis: {
+                            categories: {{ add_confusion_labels|safe }},
+                            title: 'True Label',
+                            reversed: true
+                        },
+                        colorAxis: {
+                            min: 0,
+                            minColor: '#FFFFFF',
+                            maxColor: Highcharts.getOptions().colors[0]
+                        },
+                        legend: {
+                            align: 'right',
+                            layout: 'vertical',
+                            margin: 0,
+                            verticalAlign: 'top',
+                            y: 25,
+                            symbolHeight: 280
+                        },
+
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + getPointCategoryName(this.point, 'x') + '</b> is predicted as <br><b>' + getPointCategoryName(this.point, 'y') +'</b> for <br><b>' +
+                                    this.point.value + '</b> times<br><b>' + '</b>';
+                            }
+                            },
+
+                        series: [{
+                            name: 'confusion matrix',
+                            borderWidth: 1,
+                            data: {{ add_confusion_data|safe }},
+                            dataLabels: {
+                                enabled: true,
+                                color: '#000000'
+                            }
+                        }],
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    yAxis: {
+                                        labels: {
+                                            formatter: function () {
+                                                return this.value.charAt(0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                        }
+                    });
+                </script>
+
+            {% else %}
+            {% endif %}
+
+        </figure>
+
+    </div>
+
+
+
+
 
 
 
