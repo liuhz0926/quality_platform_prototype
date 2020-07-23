@@ -99,9 +99,6 @@ def eval_report_prediction(request):
     return render(request, 'quality_platform/eval_report_prediction.html', context)
 
 
-
-
-
 def eval_pred_report_confusion(request):
     '''
         Since the overview page would go first,

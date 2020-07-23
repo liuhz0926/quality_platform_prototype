@@ -6,7 +6,6 @@ from .evaluate.Threshold_analysis import Threshold_analysis
 from .evaluate.Error_analysis import Error_analysis
 
 
-
 class Eval_Report:
     def __init__(self):
         self.total_instance = None
