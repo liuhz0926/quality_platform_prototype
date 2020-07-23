@@ -60,12 +60,15 @@ class Threshold_analysis:
                 instance1 = len(temp1.index)
                 percent1 = len(temp1.index)/total*100
                 accuracy1 = accuracy_score(temp1.iloc[:,0],temp1.iloc[:,3])
-                accuracy_list.append(round(accuracy1,3))
+                accuracy_list1.append(round(accuracy1,3))
                 result.append([threshold, instance, instance1, round(percent, 3), round(percent1, 3),round(accuracy, 3), round(accuracy1,3)])
-                return result, threshold_list, accuracy_list,accuracy_list1
-            result.append([threshold, instance, round(percent, 3), round(accuracy, 3)])
+                #return result, threshold_list, accuracy_list,accuracy_list1
+            else:
+                result.append([threshold, instance, round(percent, 3), round(accuracy, 3)])
             # result.append("Threshold at "+str(i/100)+": total instance = "+ str(len(temp.index)) + " ("+str(round(percent, 3))+"%), accuracy = " + str(round(accuracy, 3)))
         #print(result)
+        if self.two_model:
+            return result, threshold_list, accuracy_list, accuracy_list1
         return result, threshold_list, accuracy_list
 
     def generate_roc_curve(self,pos_label): # this is for binary class, and pos_label means input the label for positive class

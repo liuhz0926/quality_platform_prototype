@@ -16,15 +16,21 @@ class Eval_Report:
         self.threshold_accuracy = None
         self.threshold_list = None
         self.error = None
+        self.add_total_instance = None
+        self.add_evaluate_table = None
+        self.add_instance_class = None
+        self.add_threshold_accuracy = None
 
 
-
-    def load_report(self, truth_file, prediction_file):
+    def load_report(self, truth_file, prediction_file, add_pred_file = None):
         # overview page and confusion matrix
-        self.load_overview(truth_file, prediction_file)
-        self.load_threshold(truth_file, prediction_file)
+        self.total_instance, self.evaluate_table, self.instance_class = \
+            self.load_overview(truth_file, prediction_file)
+        self.load_threshold(truth_file, prediction_file, add_pred_file)
         self.load_error(truth_file, prediction_file)
-
+        if add_pred_file != None:
+            self.add_total_instance, self.add_evaluate_table, self.add_instance_class = \
+                self.load_overview(truth_file, add_pred_file)
         return
 
     def load_overview(self, truth_file, prediction_file):
@@ -35,25 +41,33 @@ class Eval_Report:
         :return: call overview class to set up evaluation overview report
         '''
         overview = Overview(truth_file, prediction_file, 1)
-        self.total_instance = overview.total_instance('Truth')
+        total_instance = overview.total_instance('Truth')
         eval_dict = overview.evaluation()
-        self.evaluate_table = make_eval_table(eval_dict, self.total_instance)
-        self.instance_class = overview.instance_per_class('Truth')
+        evaluate_table = make_eval_table(eval_dict, total_instance)
+        instance_class = overview.instance_per_class('Truth')
 
         # make confusion matrix
         overview.confusion_matrix()
 
-        return
+        return total_instance, evaluate_table, instance_class
 
-    def load_threshold(self, truth_file, prediction_file):
+    def load_threshold(self, truth_file, prediction_file, add_pred_file = None):
         '''
 
         :param truth_file: tsv file
         :param prediction_file: tsv file
         :return: call threshold analysis class
         '''
-        threshold_analysis = Threshold_analysis(truth_file, prediction_file)
-        self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
+        if add_pred_file == None:
+
+            threshold_analysis = Threshold_analysis(truth_file, prediction_file)
+            self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
+            return
+        else:
+            threshold_analysis = Threshold_analysis(truth_file, prediction_file, add_pred_file)
+            self.threshold, self.threshold_list, self.threshold_accuracy, self.add_threshold_accuracy = \
+                threshold_analysis.generate_theshold()
+
 
         return
 

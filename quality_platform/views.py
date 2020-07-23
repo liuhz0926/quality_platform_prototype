@@ -59,16 +59,20 @@ def load_backend(addition = False):
     truth_file = home_address + uploaded_files.truth_file.url
     prediction_file = home_address + uploaded_files.prediction_file.url
 
+    if not addition:
+        # init Eval_Report object
+        global EVAL_REPORT
+        EVAL_REPORT = Eval_Report()
+
     if addition:
         addition_files = EvalAddFile.objects.last()
         add_pred_file = home_address + addition_files.addition_pred_file.url
-        print("Here is the new add_pred_file", add_pred_file)
+        # print("Here is the new add_pred_file", add_pred_file)
+        # set the new report
+        EVAL_REPORT.load_report(truth_file, prediction_file, add_pred_file)
 
-    # NEED TO UPDATE
-
-    # set the report
-    global EVAL_REPORT
-    EVAL_REPORT.load_report(truth_file, prediction_file)
+    else:
+        EVAL_REPORT.load_report(truth_file, prediction_file)
 
     return
 
@@ -81,13 +85,21 @@ def eval_report_prediction(request):
     :return: render request to the overview page
     '''
     context = {'title': 'Report with a Prediction File'}
-
     # make an evaluation table
     context['evaluation'] = EVAL_REPORT.evaluate_table
     context['total_instance'] = EVAL_REPORT.total_instance
     context['instance_per_class'] = EVAL_REPORT.instance_class
 
+    if EVAL_REPORT.add_total_instance != None:
+        context['add_evaluation'] = EVAL_REPORT.add_evaluate_table
+        context['add_total_instance'] = EVAL_REPORT.add_total_instance
+        context['add_instance_per_class'] = EVAL_REPORT.add_instance_class
+
+
     return render(request, 'quality_platform/eval_report_prediction.html', context)
+
+
+
 
 
 def eval_pred_report_confusion(request):
@@ -124,6 +136,9 @@ def eval_pred_report_threshold(request):
     context['threshold'] = EVAL_REPORT.threshold
     context['threshold_list'] = EVAL_REPORT.threshold_list
     context['threshold_accuracy'] = EVAL_REPORT.threshold_accuracy
+    if EVAL_REPORT.add_threshold_accuracy != None:
+        context['add_threshold_accuracy'] = EVAL_REPORT.add_threshold_accuracy
+
     return render(request, 'quality_platform/eval_report_pred_threshold.html', context)
 
 

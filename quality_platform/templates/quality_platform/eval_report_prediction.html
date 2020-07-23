@@ -21,6 +21,10 @@
 
 
     <div class="container">
+        {% if add_evaluation != null %}
+            <h4>Model 1</h4>
+        {% else %}
+        {% endif %}
         <table class="table">
             <thead>
             <tr>
@@ -47,6 +51,39 @@
             <h6>{{ instance }}</h6>
         {% endfor %}
     </div>
+
+    {% if add_evaluation != null %}
+        <div class="container">
+            <h4>Model 2</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th>&nbsp</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1-score</th>
+                    <th>Support</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in add_evaluation %}
+                    <tr>
+                        {% for val in row %}
+                            <td>{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h5>Total instance is {{ add_total_instance }}, and for each class:</h5>
+            {% for inst in add_instance_per_class %}
+                <h6>{{ inst }}</h6>
+            {% endfor %}
+
+        </div>
+    {% else %}
+    {% endif %}
 
 
 {% endblock content %}
