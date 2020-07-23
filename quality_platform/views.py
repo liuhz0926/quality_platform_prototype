@@ -109,9 +109,8 @@ def eval_pred_report_confusion(request):
     '''
     context = {'title': 'Report with a Prediction File'}
     context['confusion_labels'] = EVAL_REPORT.confusion_labels
-    print(context['confusion_labels'])
     context['confusion_data'] = EVAL_REPORT.confusion_data
-    print(type(context['confusion_data']))
+
     if EVAL_REPORT.add_confusion_labels != None:
         context['add_confusion_labels'] = EVAL_REPORT.add_confusion_labels
         context['add_confusion_data'] = EVAL_REPORT.add_confusion_data
@@ -130,6 +129,7 @@ def eval_pred_report_confusion_proportion(request):
     context = {'title': 'Report with a Prediction File'}
     context['normal_labels'] = EVAL_REPORT.normal_labels
     context['normal_data'] = EVAL_REPORT.normal_data
+
     if EVAL_REPORT.add_confusion_labels != None:
         context['add_normal_labels'] = EVAL_REPORT.add_normal_labels
         context['add_normal_data'] = EVAL_REPORT.add_normal_data
@@ -146,6 +146,7 @@ def eval_pred_report_threshold(request):
     context['threshold'] = EVAL_REPORT.threshold
     context['threshold_list'] = EVAL_REPORT.threshold_list
     context['threshold_accuracy'] = EVAL_REPORT.threshold_accuracy
+
     if EVAL_REPORT.add_threshold_accuracy != None:
         context['add_threshold_accuracy'] = EVAL_REPORT.add_threshold_accuracy
 
