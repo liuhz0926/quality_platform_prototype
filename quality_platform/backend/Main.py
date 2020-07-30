@@ -51,7 +51,7 @@ class Eval_Report:
 
 
         self.load_threshold(truth_file, prediction_file, add_pred_file)
-        self.load_error(truth_file, prediction_file)
+        self.load_error(truth_file, prediction_file, add_pred_file)
         if add_pred_file != None:
             add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file)
             self.add_total_instance = add_overview_list[0]
@@ -94,28 +94,29 @@ class Eval_Report:
         :param prediction_file: tsv file
         :return: call threshold analysis class
         '''
-        if add_pred_file == None:
-
-            threshold_analysis = Threshold_analysis(truth_file, prediction_file)
-            self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
-            return
-        else:
+        if add_pred_file:
             threshold_analysis = Threshold_analysis(truth_file, prediction_file, add_pred_file)
             self.threshold, self.threshold_list, self.threshold_accuracy, self.add_threshold_accuracy = \
                 threshold_analysis.generate_theshold()
-
+        else:
+            threshold_analysis = Threshold_analysis(truth_file, prediction_file)
+            self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
 
         return
 
-    def load_error(self, truth_file, prediction_file):
+    def load_error(self, truth_file, prediction_file, add_pred_file = None):
         '''
 
         :param truth_file:
         :param prediction_file:
         :return: call error analysis
         '''
-        error_analysis = Error_analysis(truth_file, prediction_file)
-        self.error = error_analysis.gen_errors()
+        if add_pred_file:
+            error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file)
+            self.error = error_analysis.gen_errors()
+        else:
+            error_analysis = Error_analysis(truth_file, prediction_file)
+            self.error = error_analysis.gen_errors()
 
         return
 
