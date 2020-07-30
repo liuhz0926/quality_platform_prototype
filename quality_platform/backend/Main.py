@@ -64,8 +64,6 @@ class Eval_Report:
 
         return
 
-
-
     def load_overview(self, truth_file, prediction_file):
         '''
 
