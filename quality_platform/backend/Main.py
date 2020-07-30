@@ -52,7 +52,7 @@ class Eval_Report:
 
         self.load_threshold(truth_file, prediction_file, add_pred_file)
         self.load_error(truth_file, prediction_file, add_pred_file)
-        if add_pred_file != None:
+        if add_pred_file:
             add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file)
             self.add_total_instance = add_overview_list[0]
             self.add_evaluate_table = add_overview_list[1]
@@ -111,12 +111,8 @@ class Eval_Report:
         :param prediction_file:
         :return: call error analysis
         '''
-        if add_pred_file:
-            error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file)
-            self.error = error_analysis.gen_errors()
-        else:
-            error_analysis = Error_analysis(truth_file, prediction_file)
-            self.error = error_analysis.gen_errors()
+        error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file)
+        self.error = error_analysis.gen_errors()
 
         return
 
