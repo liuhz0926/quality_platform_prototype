@@ -9,7 +9,7 @@ from sklearn.metrics import roc_curve,roc_auc_score,accuracy_score
 #pd.set_option('display.max_colwidth', -1)
 
 class Error_analysis:
-    def __init__(self,tfile, pfile, id_col = 0, r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
+    def __init__(self,tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
                                                     # result/class column, p_col stands for column of probablity
         if tfile[-3:] == "tsv":
             self.td = '\t' #td means delimeter for tfile
@@ -27,6 +27,10 @@ class Error_analysis:
             return
         self.tfile = pd.read_csv(tfile,sep=self.td,header=None)
         self.pfile = pd.read_csv(pfile,sep=self.pd,header=None)
+        if pfile2:
+            self.pfile2 = pd.read_csv(pfile2, sep=self.pd, header=None)
+        else:
+            self.pfile2 = None
         self.id_col = id_col
         self.r_col = r_col
         self.p_col = p_col
@@ -43,8 +47,18 @@ class Error_analysis:
 
         column = self.tfile.iloc[:, self.r_col]
         misclassified = np.where(column != self.pfile.iloc[:, self.r_col])
-        mis_np = np.concatenate((np.vstack(self.tfile.iloc[:,self.id_col].to_numpy()[misclassified]), np.vstack(self.tfile.iloc[:,self.r_col].to_numpy()[misclassified]), np.vstack(self.pfile.iloc[:,self.r_col].to_numpy()[misclassified]),np.vstack(self.pfile.iloc[:,self.p_col].to_numpy()[misclassified]),np.vstack(self.tfile.iloc[:,self.p_col].to_numpy()[misclassified])),axis=1)
-        df = pd.DataFrame(data=mis_np, columns=["id", "actual", "predicted","probability","content"])
+        if self.pfile2:
+            mis_np = np.concatenate((np.vstack(self.tfile.iloc[:, self.id_col].to_numpy()[misclassified]),
+                                     np.vstack(self.tfile.iloc[:, self.r_col].to_numpy()[misclassified]),
+                                     np.vstack(self.pfile.iloc[:, self.r_col].to_numpy()[misclassified]),
+                                     np.vstack(self.pfile.iloc[:, self.p_col].to_numpy()[misclassified]),
+                                     np.vstack(self.pfile2.iloc[:, self.r_col].to_numpy()[misclassified]),
+                                     np.vstack(self.pfile2.iloc[:, self.p_col].to_numpy()[misclassified]),
+                                     np.vstack(self.tfile.iloc[:, self.p_col].to_numpy()[misclassified])), axis=1)
+            df = pd.DataFrame(data=mis_np, columns=["id", "actual", "predicted","probability","predicted_2","probability_2","content"])
+        else:
+            mis_np = np.concatenate((np.vstack(self.tfile.iloc[:,self.id_col].to_numpy()[misclassified]), np.vstack(self.tfile.iloc[:,self.r_col].to_numpy()[misclassified]), np.vstack(self.pfile.iloc[:,self.r_col].to_numpy()[misclassified]),np.vstack(self.pfile.iloc[:,self.p_col].to_numpy()[misclassified]),np.vstack(self.tfile.iloc[:,self.p_col].to_numpy()[misclassified])),axis=1)
+            df = pd.DataFrame(data=mis_np, columns=["id", "actual", "predicted","probability","content"])
         df = df.sort_values(by=['actual'])
         error_data = list(df.T.to_dict().values())
         #print(df)
