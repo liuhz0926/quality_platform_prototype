@@ -51,8 +51,8 @@ class Eval_Report:
 
 
         self.load_threshold(truth_file, prediction_file, add_pred_file)
-        self.load_error(truth_file, prediction_file)
-        if add_pred_file != None:
+        self.load_error(truth_file, prediction_file, add_pred_file)
+        if add_pred_file:
             add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file)
             self.add_total_instance = add_overview_list[0]
             self.add_evaluate_table = add_overview_list[1]
@@ -63,8 +63,6 @@ class Eval_Report:
             self.add_normal_data = add_confusion_list[3]
 
         return
-
-
 
     def load_overview(self, truth_file, prediction_file):
         '''
@@ -94,27 +92,24 @@ class Eval_Report:
         :param prediction_file: tsv file
         :return: call threshold analysis class
         '''
-        if add_pred_file == None:
-
-            threshold_analysis = Threshold_analysis(truth_file, prediction_file)
-            self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
-            return
-        else:
+        if add_pred_file:
             threshold_analysis = Threshold_analysis(truth_file, prediction_file, add_pred_file)
             self.threshold, self.threshold_list, self.threshold_accuracy, self.add_threshold_accuracy = \
                 threshold_analysis.generate_theshold()
-
+        else:
+            threshold_analysis = Threshold_analysis(truth_file, prediction_file)
+            self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
 
         return
 
-    def load_error(self, truth_file, prediction_file):
+    def load_error(self, truth_file, prediction_file, add_pred_file = None):
         '''
 
         :param truth_file:
         :param prediction_file:
         :return: call error analysis
         '''
-        error_analysis = Error_analysis(truth_file, prediction_file)
+        error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file)
         self.error = error_analysis.gen_errors()
 
         return

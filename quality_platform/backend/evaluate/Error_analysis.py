@@ -27,7 +27,9 @@ class Error_analysis:
             return
         self.tfile = pd.read_csv(tfile,sep=self.td,header=None)
         self.pfile = pd.read_csv(pfile,sep=self.pd,header=None)
+        self.second = False
         if pfile2:
+            self.second = True
             self.pfile2 = pd.read_csv(pfile2, sep=self.pd, header=None)
         else:
             self.pfile2 = None
@@ -47,7 +49,7 @@ class Error_analysis:
 
         column = self.tfile.iloc[:, self.r_col]
         misclassified = np.where(column != self.pfile.iloc[:, self.r_col])
-        if self.pfile2:
+        if self.second:
             mis_np = np.concatenate((np.vstack(self.tfile.iloc[:, self.id_col].to_numpy()[misclassified]),
                                      np.vstack(self.tfile.iloc[:, self.r_col].to_numpy()[misclassified]),
                                      np.vstack(self.pfile.iloc[:, self.r_col].to_numpy()[misclassified]),
@@ -55,13 +57,22 @@ class Error_analysis:
                                      np.vstack(self.pfile2.iloc[:, self.r_col].to_numpy()[misclassified]),
                                      np.vstack(self.pfile2.iloc[:, self.p_col].to_numpy()[misclassified]),
                                      np.vstack(self.tfile.iloc[:, self.p_col].to_numpy()[misclassified])), axis=1)
-            df = pd.DataFrame(data=mis_np, columns=["id", "actual", "predicted","probability","predicted_2","probability_2","content"])
+            df = pd.DataFrame(data=mis_np, columns=["id", "actual", "predicted_1","probability_1","predicted_2","probability_2","content"])
         else:
-            mis_np = np.concatenate((np.vstack(self.tfile.iloc[:,self.id_col].to_numpy()[misclassified]), np.vstack(self.tfile.iloc[:,self.r_col].to_numpy()[misclassified]), np.vstack(self.pfile.iloc[:,self.r_col].to_numpy()[misclassified]),np.vstack(self.pfile.iloc[:,self.p_col].to_numpy()[misclassified]),np.vstack(self.tfile.iloc[:,self.p_col].to_numpy()[misclassified])),axis=1)
+            mis_np = np.concatenate((np.vstack(self.tfile.iloc[:,self.id_col].to_numpy()[misclassified]),
+                                     np.vstack(self.tfile.iloc[:,self.r_col].to_numpy()[misclassified]),
+                                     np.vstack(self.pfile.iloc[:,self.r_col].to_numpy()[misclassified]),
+                                     np.vstack(self.pfile.iloc[:,self.p_col].to_numpy()[misclassified]),
+                                     np.vstack(self.tfile.iloc[:,self.p_col].to_numpy()[misclassified])), axis=1)
             df = pd.DataFrame(data=mis_np, columns=["id", "actual", "predicted","probability","content"])
         df = df.sort_values(by=['actual'])
         error_data = list(df.T.to_dict().values())
-        #print(df)
+        for dict in error_data:
+            if self.second:
+                dict['probability_1'] = round(float(dict['probability_1']), 5)
+                dict['probability_2'] = round(float(dict['probability_2']), 5)
+            else:
+                dict['probability'] = round(float(dict['probability']), 5)
         return error_data
 
 #test = Error_analysis('2.truth.tsv','3.prediction.tsv')

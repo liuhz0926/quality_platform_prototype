@@ -31,8 +31,40 @@
         </li>
     </ul>
 
-
-    <table id="error-table"
+    {% if addition %}
+        <table id="error-table"
+           class="table table-striped table-condensed"
+           data-toolbar="#toolbar"
+           data-show-export="false"
+           data-search="true"
+           data-show-columns="true"
+           data-pagination="true"
+           data-page-size="100"
+           data-page-list="[100]"
+           data-sort-name="probability"
+           data-sort-order="desc"
+           data-cache="false"
+           data-filter-control="true"
+           data-show-toggle="true">
+        <thead>
+        <tr>
+            <th rowspan="2" data-field="state" data-checkbox="true"></th>
+            <th rowspan="2" data-field="id" data-align="center" data-sortable="true" data-filter-control="input">ID</th>
+            <th rowspan="2" data-field="actual" data-align="center" data-filter-control="select">Actual Class</th>
+            <th colspan="2">Predicted Class</th>
+            <th colspan="2">Probability</th>
+            <th rowspan="2" data-field="content" data-align="left" data-filter-control="input">Content</th>
+        </tr>
+        <tr>
+            <th data-field="predicted_1" data-align="center" data-filter-control="select">Model 1</th>
+            <th data-field="predicted_2" data-align="center" data-filter-control="select">Model 2</th>
+            <th data-field="probability_1" data-align="left" data-sortable="true">Model 1</th>
+            <th data-field="probability_2" data-align="left" data-sortable="true">Model 2</th>
+        </tr>
+        </thead>
+        </table>
+    {% else %}
+        <table id="error-table"
            class="table table-striped table-condensed"
            data-toolbar="#toolbar"
            data-show-export="false"
@@ -56,7 +88,9 @@
             <th data-field="content" data-align="left" data-filter-control="input">Content</th>
         </tr>
         </thead>
-    </table>
+        </table>
+    {% endif %}
+
 
 
 
