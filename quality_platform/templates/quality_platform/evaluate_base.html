@@ -85,7 +85,8 @@
         </div>
 
         <div class="col">
-          <button class="btn default">With a pretrain model</button>
+          <button class="btn default" onclick="location.href='{% url 'platform-evaluate-upload-pretrain' %}'" type="button">
+              With a pretrain model</button>
 
             <p>Upload your model, the data to predict and the golden truth to evaluate your system</p>
         </div>

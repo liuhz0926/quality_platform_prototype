@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 import pandas as pd
 import numpy as np
-from .forms import EvalFileForm, EvalAddFileForm
-from .models import EvalPredFile, EvalAddFile
+from .forms import EvalFileForm, EvalAddFileForm, EvalPretrainForm
+from .models import EvalPredFile, EvalAddFile, EvalPretrainFile
 from .backend.Main import Eval_Report
 
 
@@ -165,6 +165,7 @@ def eval_pred_report_error(request):
         context['addition'] = 1
     return render(request, 'quality_platform/eval_report_pred_error.html', context)
 
+
 def eval_pred_report_upload(request):
     '''
 
@@ -188,3 +189,28 @@ def eval_pred_report_upload(request):
 
     return render(request, 'quality_platform/eval_report_upload_new.html', context)
 
+
+def eval_upload_pretrain(request):
+    '''
+        After clicking with a pretrain model
+        upload a zip file for coco and file in the table for coco
+        redirect to the report page
+    :param request:
+    :return:
+    '''
+    context = {'title': 'with a Pretrain Model'}
+
+    if request.method == 'POST':
+        form = EvalPretrainForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            # Evaluate the model
+            #load_backend()
+            return redirect('platform-evaluate-report-prediction')
+        pass
+    else: # if request is get
+        pass
+        form = EvalPretrainForm()
+        context['form'] = form
+
+    return render(request, 'quality_platform/eval_upload_pretrain.html', context)
