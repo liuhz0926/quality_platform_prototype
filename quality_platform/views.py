@@ -204,6 +204,7 @@ def eval_upload_pretrain(request):
         form = EvalPretrainForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            print(form.cleaned_data)
             # Evaluate the model
             #load_backend()
             return redirect('platform-evaluate-report-prediction')
