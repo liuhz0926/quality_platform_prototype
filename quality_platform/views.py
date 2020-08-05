@@ -52,7 +52,7 @@ def eval_upload_prediction(request):
 
 
 def load_backend(addition = False):
-    home_address = '~/Django_project/GitHub/quality_platform_prototype/'
+    home_address = '~/quality_platform_prototype/'
 
     # get the last uploaded files
     uploaded_files = EvalPredFile.objects.last()
