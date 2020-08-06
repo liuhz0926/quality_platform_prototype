@@ -15,11 +15,12 @@ class EvalPretrainForm(forms.ModelForm):
     class Meta:
         model = EvalPretrainFile
         fields = ('pretrain_file',
+                  'description',
+                  'max_length',
+                  'epochs',
+                  'n_classes',
                   'tokenization',
                   'architecture',
                   'pretrained_model',
                   'finetune',
-                  'max_length',
-                  'epochs',
-                  'n_classes',
                   )

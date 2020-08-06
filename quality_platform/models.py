@@ -12,6 +12,21 @@ class EvalAddFile(models.Model):
 class EvalPretrainFile(models.Model):
     pretrain_file = models.FileField(upload_to='evaluate/pretrain_file/')
 
+    description = models.TextField(default="getting-started")
+
+    max_length = models.IntegerField(
+        default=120,
+        validators=[MaxValueValidator(512), MinValueValidator(120)]
+    )
+    epochs = models.IntegerField(
+        default=15,
+        validators=[MaxValueValidator(30), MinValueValidator(2)]
+    )
+    n_classes = models.IntegerField(
+        default=2,
+        validators=[MinValueValidator(2)]
+    )
+
     TOKEN_CHOICE = (('word', 'word'),
                     ('char', 'char'),
                     ('transformer', 'transformer'))
@@ -29,15 +44,3 @@ class EvalPretrainFile(models.Model):
     pretrained_model = models.CharField(max_length=50, choices=MODEL_CHOICE)
 
     finetune = models.BooleanField()
-    max_length = models.IntegerField(
-        default=120,
-        validators=[MaxValueValidator(512), MinValueValidator(120)]
-    )
-    epochs = models.IntegerField(
-        default=15,
-        validators=[MaxValueValidator(30), MinValueValidator(2)]
-    )
-    n_classes = models.IntegerField(
-        default=2,
-        validators=[MinValueValidator(2)]
-    )

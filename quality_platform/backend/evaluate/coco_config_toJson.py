@@ -44,7 +44,8 @@ def config_to_python(description="None",dataset="DE-sentiment-mixed",data_folder
     "GPUs": "0"
 
     }
-    with open('config.json','w') as file:
-        json.dump(my_json,file,ensure_ascii=False)
-    return None
-config_to_python()
+    # with open('config.json','w') as file:
+        # json.dump(my_json,file,ensure_ascii=False)
+    return json.dumps(my_json)
+
+# print(config_to_python())

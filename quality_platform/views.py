@@ -4,6 +4,7 @@ import numpy as np
 from .forms import EvalFileForm, EvalAddFileForm, EvalPretrainForm
 from .models import EvalPredFile, EvalAddFile, EvalPretrainFile
 from .backend.Main import Eval_Report
+from .backend.evaluate.Coco_Request import Coco_request
 
 
 EVAL_REPORT = Eval_Report()
@@ -41,7 +42,7 @@ def eval_upload_prediction(request):
         if form.is_valid():
             form.save()
             # Evaluate the model
-            load_backend()
+            load_backend(prediction=True)
             return redirect('platform-evaluate-report-prediction')
 
     else: # if request is get
@@ -51,13 +52,21 @@ def eval_upload_prediction(request):
     return render(request, 'quality_platform/eval_upload_prediction.html', context)
 
 
-def load_backend(addition = False):
+def load_backend(prediction=False, pretrain=False, addition=False):
     home_address = '~/quality_platform_prototype/'
 
     # get the last uploaded files
-    uploaded_files = EvalPredFile.objects.last()
-    truth_file = home_address + uploaded_files.truth_file.url
-    prediction_file = home_address + uploaded_files.prediction_file.url
+    if prediction:
+        uploaded_files = EvalPredFile.objects.last()
+        truth_url = uploaded_files.truth_file.url
+        prediction_url = uploaded_files.prediction_file.url
+    if pretrain:
+        load_coco()
+        return
+
+    truth_file = home_address + truth_url
+    prediction_file = home_address + prediction_url
+    #print(truth_file, prediction_file)
 
     if not addition:
         # init Eval_Report object
@@ -67,7 +76,6 @@ def load_backend(addition = False):
     if addition:
         addition_files = EvalAddFile.objects.last()
         add_pred_file = home_address + addition_files.addition_pred_file.url
-        # print("Here is the new add_pred_file", add_pred_file)
         # set the new report
         EVAL_REPORT.load_report(truth_file, prediction_file, add_pred_file)
 
@@ -75,6 +83,18 @@ def load_backend(addition = False):
         EVAL_REPORT.load_report(truth_file, prediction_file)
 
     return
+
+def load_coco():
+    test = Coco_request()
+    test.post_train()
+    #pretrain_form = EvalPretrainFile.objects.last()
+    #print(pretrain_form)
+    #print(pretrain_form.tokenization)
+    #print(pretrain_form.pretrain_file.url)
+    #print(pretrain_form.description)
+    #print(pretrain_form.n_classes)
+    #print(pretrain_form.pretrain_file.name)
+
 
 
 def eval_report_prediction(request):
@@ -180,7 +200,7 @@ def eval_pred_report_upload(request):
         if form.is_valid():
             form.save()
             # Evaluate the model
-            load_backend(addition = True)
+            load_backend(prediction=True, addition=True)
             return redirect('platform-evaluate-report-prediction')
 
     else: # if request is get
@@ -204,9 +224,10 @@ def eval_upload_pretrain(request):
         form = EvalPretrainForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            print(form.cleaned_data)
+            # print(form.cleaned_data)
+
             # Evaluate the model
-            #load_backend()
+            load_backend(pretrain=True)
             return redirect('platform-evaluate-report-prediction')
         pass
     else: # if request is get
