@@ -22,7 +22,7 @@ urlpatterns = [
     path('report/evaluate/error_analysis/', views.eval_report_error,
          name='platform-eval-report-error'),
     path('report/evaluate/upload_new/', views.eval_report_upload,
-         name='platform-eval-report-upload'),
+         name='platform-eval-report-upload-new'),
 
     # for pretrain model, use coco
     path('evaluate/pretrain/', views.eval_upload_pretrain,

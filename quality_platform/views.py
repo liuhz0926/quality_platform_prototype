@@ -103,7 +103,7 @@ def eval_upload_prediction(request):
             form.save()
             # Evaluate the model
             load_backend(prediction=True)
-            return redirect('platform-evaluate-report-prediction')
+            return redirect('platform-evaluate-report')
 
     else: # if request is get
         form = EvalFileForm()
@@ -131,7 +131,7 @@ def eval_report_overview(request):
         context['add_instance_per_class'] = EVAL_REPORT.add_instance_class
 
 
-    return render(request, 'quality_platform/eval_report_prediction.html', context)
+    return render(request, 'quality_platform/eval_report_overview.html', context)
 
 
 def eval_report_confusion(request):
@@ -150,7 +150,7 @@ def eval_report_confusion(request):
         context['add_confusion_labels'] = EVAL_REPORT.add_confusion_labels
         context['add_confusion_data'] = EVAL_REPORT.add_confusion_data
 
-    return render(request, 'quality_platform/eval_report_pred_confusion.html', context)
+    return render(request, 'quality_platform/eval_report_confusion.html', context)
 
 
 def eval_report_confusion_proportion(request):
@@ -168,7 +168,7 @@ def eval_report_confusion_proportion(request):
     if EVAL_REPORT.add_confusion_labels:
         context['add_normal_labels'] = EVAL_REPORT.add_normal_labels
         context['add_normal_data'] = EVAL_REPORT.add_normal_data
-    return render(request, 'quality_platform/eval_report_pred_confusion_proportion.html', context)
+    return render(request, 'quality_platform/eval_report_confusion_proportion.html', context)
 
 
 def eval_report_threshold(request):
@@ -185,7 +185,7 @@ def eval_report_threshold(request):
     if EVAL_REPORT.add_threshold_accuracy:
         context['add_threshold_accuracy'] = EVAL_REPORT.add_threshold_accuracy
 
-    return render(request, 'quality_platform/eval_report_pred_threshold.html', context)
+    return render(request, 'quality_platform/eval_report_threshold.html', context)
 
 
 def eval_report_error(request):
@@ -198,7 +198,7 @@ def eval_report_error(request):
     context['error'] = EVAL_REPORT.error
     if EVAL_REPORT.add_threshold_accuracy:
         context['addition'] = 1
-    return render(request, 'quality_platform/eval_report_pred_error.html', context)
+    return render(request, 'quality_platform/eval_report_error.html', context)
 
 
 def eval_report_upload(request):
@@ -216,7 +216,7 @@ def eval_report_upload(request):
             form.save()
             # Evaluate the model
             load_backend(prediction=True, addition=True)
-            return redirect('platform-evaluate-report-prediction')
+            return redirect('platform-evaluate-report')
 
     else: # if request is get
         form = EvalAddFileForm()
@@ -241,7 +241,7 @@ def eval_upload_pretrain(request):
             form.save()
 
             load_backend(pretrain=True)
-            return redirect('platform-evaluate-report-prediction')
+            return redirect('platform-evaluate-report')
         pass
     else: # if request is get
         form = EvalPretrainForm()
