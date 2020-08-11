@@ -5,7 +5,7 @@ cffi @ file:///opt/concourse/worker/volumes/live/7232682c-ed09-452c-5a23-d23e850
 chardet==3.0.4
 cryptography==2.9.2
 cycler==0.10.0
-Django==3.0.3
+Django==3.0.7
 django-crispy-forms==1.9.2
 idna @ file:///tmp/build/80754af9/idna_1593446292537/work
 joblib @ file:///tmp/build/80754af9/joblib_1594236160679/work
