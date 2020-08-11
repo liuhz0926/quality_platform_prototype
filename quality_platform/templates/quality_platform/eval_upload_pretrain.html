@@ -10,7 +10,7 @@
 
     <div class="row">
         <div>
-            <form id="pretrain_form" method="post" enctype="multipart/form-data">
+            <form id="upload_form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button id="pretrain_submit" type="submit">Submit</button>

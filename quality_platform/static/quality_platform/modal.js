@@ -6,7 +6,7 @@ $(document).on({
 });
 
 // Initiates an AJAX request on click
-$(document).on("submit","#pretrain_form", function(){
+$(document).on("submit","#upload_form", function(){
     $.get("/mockjax");
 });
 

@@ -25,8 +25,7 @@ class Coco_request:
         train_labels = get_labels(unzip_directory + 'train.tsv')
 
         # HERE IS FOR THE SAMPLE TEST
-        self.dataset_url = 'http://qwone.com/~jason/20Newsgroups/20news-19997.tar.gz'
-        train_labels = ["negative","positive"]
+        self.dataset_url = 'https://github.com/liuhz0926/quality_platform_prototype/raw/master/uploads/evaluate/pretrain_file/archive.zip'
 
         self.data_model = config_to_python(description=self.pretrain_form.description,
                                            dataset=self.pretrain_form.pretrain_file.name,

@@ -16,13 +16,13 @@ class EvalPretrainFile(models.Model):
 
     # doc default 120, min 120
     max_length = models.IntegerField(
-        default=10,
-        validators=[MaxValueValidator(512), MinValueValidator(10)]
+        default=120,
+        validators=[MaxValueValidator(512), MinValueValidator(120)]
     )
-    # doc default 15, min 1
+    # doc default 15, min 2
     epochs = models.IntegerField(
-        default=1,
-        validators=[MaxValueValidator(30), MinValueValidator(1)]
+        default=15,
+        validators=[MaxValueValidator(30), MinValueValidator(2)]
     )
     n_classes = models.IntegerField(
         default=2,
@@ -43,6 +43,6 @@ class EvalPretrainFile(models.Model):
                     ("bert-base-cased", "bert-base-cased"),
                     ("bert-multilingual-cased", "bert-multilingual-cased"),
                     ("bert-base-german-cased", "bert-base-german-cased"))
-    pretrained_model = models.CharField(default="bert-base-german-cased", max_length=50, choices=MODEL_CHOICE)
+    pretrained_model = models.CharField(default="bert-base-uncased", max_length=50, choices=MODEL_CHOICE)
 
     finetune = models.BooleanField()

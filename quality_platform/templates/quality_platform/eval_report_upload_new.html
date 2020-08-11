@@ -1,6 +1,9 @@
 {% extends "quality_platform/evaluate_base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'quality_platform/modal.css' %}">
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -23,13 +26,15 @@
     <h5 style="text-align: left; line-height: 1.6">Please Upload Another Prediction File to Compare</h5>
 
     <div class="container">
-        <form method="post" enctype="multipart/form-data">
+        <form id="upload_form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy }}
             <button type="submit">Submit another prediction file</button>
         </form>
     </div>
 
+    <div class="modal"><!-- Loader format after submit --></div>
 
+    <script src="{% static 'quality_platform/modal.js' %}"></script>
 
 {% endblock content %}
