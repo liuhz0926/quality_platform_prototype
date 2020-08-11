@@ -14,13 +14,15 @@ class EvalPretrainFile(models.Model):
 
     description = models.TextField(default="getting-started")
 
+    # doc default 120, min 120
     max_length = models.IntegerField(
-        default=120,
-        validators=[MaxValueValidator(512), MinValueValidator(120)]
+        default=10,
+        validators=[MaxValueValidator(512), MinValueValidator(10)]
     )
+    # doc default 15, min 1
     epochs = models.IntegerField(
-        default=15,
-        validators=[MaxValueValidator(30), MinValueValidator(2)]
+        default=1,
+        validators=[MaxValueValidator(30), MinValueValidator(1)]
     )
     n_classes = models.IntegerField(
         default=2,
@@ -30,17 +32,17 @@ class EvalPretrainFile(models.Model):
     TOKEN_CHOICE = (('word', 'word'),
                     ('char', 'char'),
                     ('transformer', 'transformer'))
-    tokenization = models.CharField(max_length=20, choices=TOKEN_CHOICE)
+    tokenization = models.CharField(default='transformer', max_length=20, choices=TOKEN_CHOICE)
 
     ARCH_CHOICE = (("cnn_char", "cnn_char"),
                    ("embed_bilstm_attend", "embed_bilstm_attend"),
                    ('transformer', 'transformer'))
-    architecture = models.CharField(max_length=50, choices=ARCH_CHOICE)
+    architecture = models.CharField(default='transformer', max_length=50, choices=ARCH_CHOICE)
 
-    MODEL_CHOICE = (("bert-base-german-cased", "bert-base-german-cased"),
+    MODEL_CHOICE = (("bert-base-uncased", "bert-base-uncased"),
                     ("bert-base-cased", "bert-base-cased"),
                     ("bert-multilingual-cased", "bert-multilingual-cased"),
                     ("bert-base-german-cased", "bert-base-german-cased"))
-    pretrained_model = models.CharField(max_length=50, choices=MODEL_CHOICE)
+    pretrained_model = models.CharField(default="bert-base-german-cased", max_length=50, choices=MODEL_CHOICE)
 
     finetune = models.BooleanField()

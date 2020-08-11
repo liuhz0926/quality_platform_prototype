@@ -17,11 +17,16 @@ class Coco_request:
         self.pretrain_form = EvalPretrainFile.objects.last()
         self.dataset_url = HOME_URL + self.pretrain_form.pretrain_file.url
 
+
         # get the labels from the train file
         zip_directory = HOME_ADDRESS + self.pretrain_form.pretrain_file.url
         unzip_directory = HOME_ADDRESS + 'uploads/evaluate/pretrain_file/'
         unzip(zip_directory, unzip_directory)
         train_labels = get_labels(unzip_directory + 'train.tsv')
+
+        # HERE IS FOR THE SAMPLE TEST
+        self.dataset_url = 'http://qwone.com/~jason/20Newsgroups/20news-19997.tar.gz'
+        train_labels = ["negative","positive"]
 
         self.data_model = config_to_python(description=self.pretrain_form.description,
                                            dataset=self.pretrain_form.pretrain_file.name,
@@ -46,6 +51,6 @@ class Coco_request:
         response = requests.post('http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/train',
                                  headers=HEADERS,
                                  params=params,
-                                 data=self.dataset_url)
+                                 data=self.data_model)
 
         print(response.json())

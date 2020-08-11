@@ -224,15 +224,14 @@ def eval_upload_pretrain(request):
         form = EvalPretrainForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            # print(form.cleaned_data)
 
-            # Evaluate the model
             load_backend(pretrain=True)
             return redirect('platform-evaluate-report-prediction')
         pass
     else: # if request is get
-        pass
         form = EvalPretrainForm()
         context['form'] = form
 
     return render(request, 'quality_platform/eval_upload_pretrain.html', context)
+
+
