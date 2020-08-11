@@ -9,6 +9,66 @@ from .backend.evaluate.Coco_Request import Coco_request
 
 EVAL_REPORT = Eval_Report()
 
+def load_backend(prediction=False, pretrain=False, addition=False):
+    home_address = '~/quality_platform_prototype/'
+
+    # get the last uploaded files
+    if prediction:
+        uploaded_files = EvalPredFile.objects.last()
+        truth_url = uploaded_files.truth_file.url
+        prediction_url = uploaded_files.prediction_file.url
+    if pretrain:
+        load_coco()
+        return
+
+    truth_file = home_address + truth_url
+    prediction_file = home_address + prediction_url
+    #print(truth_file, prediction_file)
+
+    if not addition:
+        # init Eval_Report object
+        global EVAL_REPORT
+        EVAL_REPORT = Eval_Report()
+
+        if prediction:
+            EVAL_REPORT.predict = True
+        if pretrain:
+            EVAL_REPORT.pretrain = True
+
+
+    if addition:
+        addition_files = EvalAddFile.objects.last()
+        add_pred_file = home_address + addition_files.addition_pred_file.url
+        # set the new report
+        EVAL_REPORT.load_report(truth_file, prediction_file, add_pred_file)
+
+    else:
+        EVAL_REPORT.load_report(truth_file, prediction_file)
+
+    return
+
+def load_coco():
+    test = Coco_request()
+    test.post_train()
+    #pretrain_form = EvalPretrainFile.objects.last()
+    #print(pretrain_form)
+    #print(pretrain_form.tokenization)
+    #print(pretrain_form.pretrain_file.url)
+    #print(pretrain_form.description)
+    #print(pretrain_form.n_classes)
+    #print(pretrain_form.pretrain_file.name)
+
+def set_report_title():
+    '''
+
+    :return: set up the context dictionary for the report titile
+    '''
+    if EVAL_REPORT.predict:
+        return {'title': 'Report with a Prediction File'}
+    if EVAL_REPORT.pretrain:
+        return {'title': 'Report after training from Coco API'}
+
+
 
 def home(request):
     '''
@@ -52,59 +112,14 @@ def eval_upload_prediction(request):
     return render(request, 'quality_platform/eval_upload_prediction.html', context)
 
 
-def load_backend(prediction=False, pretrain=False, addition=False):
-    home_address = '~/quality_platform_prototype/'
-
-    # get the last uploaded files
-    if prediction:
-        uploaded_files = EvalPredFile.objects.last()
-        truth_url = uploaded_files.truth_file.url
-        prediction_url = uploaded_files.prediction_file.url
-    if pretrain:
-        load_coco()
-        return
-
-    truth_file = home_address + truth_url
-    prediction_file = home_address + prediction_url
-    #print(truth_file, prediction_file)
-
-    if not addition:
-        # init Eval_Report object
-        global EVAL_REPORT
-        EVAL_REPORT = Eval_Report()
-
-    if addition:
-        addition_files = EvalAddFile.objects.last()
-        add_pred_file = home_address + addition_files.addition_pred_file.url
-        # set the new report
-        EVAL_REPORT.load_report(truth_file, prediction_file, add_pred_file)
-
-    else:
-        EVAL_REPORT.load_report(truth_file, prediction_file)
-
-    return
-
-def load_coco():
-    test = Coco_request()
-    test.post_train()
-    #pretrain_form = EvalPretrainFile.objects.last()
-    #print(pretrain_form)
-    #print(pretrain_form.tokenization)
-    #print(pretrain_form.pretrain_file.url)
-    #print(pretrain_form.description)
-    #print(pretrain_form.n_classes)
-    #print(pretrain_form.pretrain_file.name)
-
-
-
-def eval_report_prediction(request):
+def eval_report_overview(request):
     '''
         Find the two uploaded files and call the Overview Class from the backend
         Calculate the overview and produce the confusion matrix png
     :param request:
     :return: render request to the overview page
     '''
-    context = {'title': 'Report with a Prediction File'}
+    context = set_report_title()
     # make an evaluation table
     context['evaluation'] = EVAL_REPORT.evaluate_table
     context['total_instance'] = EVAL_REPORT.total_instance
@@ -119,7 +134,7 @@ def eval_report_prediction(request):
     return render(request, 'quality_platform/eval_report_prediction.html', context)
 
 
-def eval_pred_report_confusion(request):
+def eval_report_confusion(request):
     '''
         Since the overview page would go first,
         Overview page would create the confusion matrix png in the static folder
@@ -127,7 +142,7 @@ def eval_pred_report_confusion(request):
     :param request:
     :return: render request to the confusion matrix page
     '''
-    context = {'title': 'Report with a Prediction File'}
+    context = set_report_title()
     context['confusion_labels'] = EVAL_REPORT.confusion_labels
     context['confusion_data'] = EVAL_REPORT.confusion_data
 
@@ -138,7 +153,7 @@ def eval_pred_report_confusion(request):
     return render(request, 'quality_platform/eval_report_pred_confusion.html', context)
 
 
-def eval_pred_report_confusion_proportion(request):
+def eval_report_confusion_proportion(request):
     '''
         Since the overview page would go first,
         Overview page would create the confusion matrix proportion png in the static folder
@@ -146,7 +161,7 @@ def eval_pred_report_confusion_proportion(request):
     :param request:
     :return: render request to the confusion matrix page
     '''
-    context = {'title': 'Report with a Prediction File'}
+    context = set_report_title()
     context['normal_labels'] = EVAL_REPORT.normal_labels
     context['normal_data'] = EVAL_REPORT.normal_data
 
@@ -156,13 +171,13 @@ def eval_pred_report_confusion_proportion(request):
     return render(request, 'quality_platform/eval_report_pred_confusion_proportion.html', context)
 
 
-def eval_pred_report_threshold(request):
+def eval_report_threshold(request):
     '''
 
     :param request:
     :return:
     '''
-    context = {'title': 'Report with a Prediction File'}
+    context = set_report_title()
     context['threshold'] = EVAL_REPORT.threshold
     context['threshold_list'] = EVAL_REPORT.threshold_list
     context['threshold_accuracy'] = EVAL_REPORT.threshold_accuracy
@@ -173,26 +188,26 @@ def eval_pred_report_threshold(request):
     return render(request, 'quality_platform/eval_report_pred_threshold.html', context)
 
 
-def eval_pred_report_error(request):
+def eval_report_error(request):
     '''
 
     :param request:
     :return:
     '''
-    context = {'title': 'Report with a Prediction File'}
+    context = set_report_title()
     context['error'] = EVAL_REPORT.error
     if EVAL_REPORT.add_threshold_accuracy:
         context['addition'] = 1
     return render(request, 'quality_platform/eval_report_pred_error.html', context)
 
 
-def eval_pred_report_upload(request):
+def eval_report_upload(request):
     '''
 
     :param request:
     :return:
     '''
-    context = {'title': 'Report with a Prediction File'}
+    context = set_report_title()
 
     if request.method == 'POST':
         form = EvalAddFileForm(request.POST, request.FILES)

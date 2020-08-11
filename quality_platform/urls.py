@@ -9,18 +9,20 @@ urlpatterns = [
     # for prediction files
     path('evaluate/prediction/', views.eval_upload_prediction,
          name='platform-evaluate-upload-prediction'),
-    path('report/evaluate/prediction/overview/', views.eval_report_prediction,
-         name='platform-evaluate-report-prediction'),
-    path('report/evaluate/prediction/confusion_matrix/', views.eval_pred_report_confusion,
-         name='platform-eval-pred-report-confusion'),
-    path('report/evaluate/prediction/confusion_matrix/proportion', views.eval_pred_report_confusion_proportion,
-         name='platform-eval-pred-report-confusion-proportion'),
-    path('report/evaluate/prediction/threshold_analysis/', views.eval_pred_report_threshold,
-         name='platform-eval-pred-report-threshold'),
-    path('report/evaluate/prediction/error_analysis/', views.eval_pred_report_error,
-         name='platform-eval-pred-report-error'),
-    path('report/evaluate/prediction/upload_new/', views.eval_pred_report_upload,
-         name='platform-eval-pred-report-upload'),
+
+    # reports
+    path('report/evaluate/overview/', views.eval_report_overview,
+         name='platform-evaluate-report'),
+    path('report/evaluate/confusion_matrix/', views.eval_report_confusion,
+         name='platform-eval-report-confusion'),
+    path('report/evaluate/confusion_matrix/proportion', views.eval_report_confusion_proportion,
+         name='platform-eval-report-confusion-proportion'),
+    path('report/evaluate/threshold_analysis/', views.eval_report_threshold,
+         name='platform-eval-report-threshold'),
+    path('report/evaluate/error_analysis/', views.eval_report_error,
+         name='platform-eval-report-error'),
+    path('report/evaluate/upload_new/', views.eval_report_upload,
+         name='platform-eval-report-upload'),
 
     # for pretrain model, use coco
     path('evaluate/pretrain/', views.eval_upload_pretrain,

@@ -8,6 +8,10 @@ from .evaluate.Error_analysis import Error_analysis
 
 class Eval_Report:
     def __init__(self):
+        # Mark if it is for predict file or pretrain file
+        self.predict = None
+        self.pretrain = None
+
         # Overview properties
         self.total_instance = None
         self.evaluate_table = None
