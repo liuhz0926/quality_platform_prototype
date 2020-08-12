@@ -16,8 +16,8 @@ class EvalPretrainFile(models.Model):
 
     # doc default 120, min 120
     max_length = models.IntegerField(
-        default=120,
-        validators=[MaxValueValidator(512), MinValueValidator(120)]
+        default=10,
+        validators=[MaxValueValidator(512), MinValueValidator(10)]
     )
     # doc default 15, min 2
     epochs = models.IntegerField(

@@ -3,11 +3,7 @@ import requests
 from .coco_config_toJson import config_to_python
 from .get_labels import unzip, get_labels
 
-HEADERS = {
-    'accept': 'application/json',
-    'SYMANTO_QP_ACCESS_TOKEN': 'QhV37mPdcz',
-    'Content-Type': 'application/json',
-}
+
 
 HOME_URL = "localhost:8000"
 HOME_ADDRESS = '~/quality_platform_prototype/'
@@ -41,15 +37,64 @@ class Coco_request:
 
 
     def post_train(self):
+        headers = {
+            'accept': 'application/json',
+            'SYMANTO_QP_ACCESS_TOKEN': 'QhV37mPdcz',
+            'Content-Type': 'application/json',
+        }
+
         print(self.data_model)
-        print(self.dataset_url)
+        #print(self.dataset_url)
         params = (
             ('dataset_url', self.dataset_url),
         )
 
-        response = requests.post('http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/train',
-                                 headers=HEADERS,
-                                 params=params,
-                                 data=self.data_model)
+        response = requests.post(
+            'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/train',
+            headers=headers,
+            params=params,
+            data=self.data_model
+        )
 
-        print(response.json())
+        self.train_result = response.json()
+        print(self.train_result)
+        self.task_id = self.train_result["task_id"]
+        self.model_name = self.train_result["model_name"]
+
+
+    def get_status(self):
+        headers = {
+            'accept': 'application/json',
+            'SYMANTO_QP_ACCESS_TOKEN': 'QhV37mPdcz',
+        }
+        params = {
+            ('task_id', self.task_id),
+        }
+
+        response = requests.get(
+            'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/status',
+            headers=headers,
+            params=params
+        )
+        self.status = response.json()
+        print(self.status)
+
+
+    def post_predict(self):
+        # UNDO
+        headers = {
+            'accept': 'application/json',
+            'SYMANTO_QP_ACCESS_TOKEN': 'QhV37mPdcz',
+        }
+        params = {
+
+        }
+
+        response = requests.get(
+            'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predict',
+            headers=headers,
+            params=params
+        )
+
+
+

@@ -53,6 +53,8 @@ def load_coco():
     # UNDER CONSTRUCTION
     test = Coco_request()
     test.post_train()
+    test.get_status()
+
     #pretrain_form = EvalPretrainFile.objects.last()
     #print(pretrain_form)
     #print(pretrain_form.tokenization)
@@ -123,6 +125,11 @@ def eval_report_overview(request):
     :return: render request to the overview page
     '''
     context = set_report_title()
+
+    # This is temporary for unfinished pretrain part
+    if EVAL_REPORT.evaluate_table is None:
+        return render(request, 'quality_platform/eval_report_overview.html', context)
+
     # make an evaluation table
     context['evaluation'] = EVAL_REPORT.evaluate_table
     context['total_instance'] = EVAL_REPORT.total_instance
@@ -146,6 +153,11 @@ def eval_report_confusion(request):
     :return: render request to the confusion matrix page
     '''
     context = set_report_title()
+
+    # This is temporary for unfinished pretrain part
+    if EVAL_REPORT.evaluate_table is None:
+        return render(request, 'quality_platform/eval_report_overview.html', context)
+
     context['confusion_labels'] = EVAL_REPORT.confusion_labels
     context['confusion_data'] = EVAL_REPORT.confusion_data
 
@@ -165,6 +177,11 @@ def eval_report_confusion_proportion(request):
     :return: render request to the confusion matrix page
     '''
     context = set_report_title()
+
+    # This is temporary for unfinished pretrain part
+    if EVAL_REPORT.evaluate_table is None:
+        return render(request, 'quality_platform/eval_report_overview.html', context)
+
     context['normal_labels'] = EVAL_REPORT.normal_labels
     context['normal_data'] = EVAL_REPORT.normal_data
 
@@ -181,6 +198,11 @@ def eval_report_threshold(request):
     :return:
     '''
     context = set_report_title()
+
+    # This is temporary for unfinished pretrain part
+    if EVAL_REPORT.evaluate_table is None:
+        return render(request, 'quality_platform/eval_report_overview.html', context)
+
     context['threshold'] = EVAL_REPORT.threshold
     context['threshold_list'] = EVAL_REPORT.threshold_list
     context['threshold_accuracy'] = EVAL_REPORT.threshold_accuracy
@@ -198,6 +220,11 @@ def eval_report_error(request):
     :return:
     '''
     context = set_report_title()
+
+    # This is temporary for unfinished pretrain part
+    if EVAL_REPORT.evaluate_table is None:
+        return render(request, 'quality_platform/eval_report_overview.html', context)
+
     context['error'] = EVAL_REPORT.error
     if EVAL_REPORT.add_threshold_accuracy:
         context['addition'] = 1
@@ -211,6 +238,10 @@ def eval_report_upload(request):
     :return:
     '''
     context = set_report_title()
+
+    # This is temporary for unfinished pretrain part
+    if EVAL_REPORT.evaluate_table is None:
+        return render(request, 'quality_platform/eval_report_overview.html', context)
 
     if request.method == 'POST':
         form = EvalAddFileForm(request.POST, request.FILES)
