@@ -126,7 +126,7 @@ def eval_report_overview(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part
+    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
     if EVAL_REPORT.evaluate_table is None:
         return render(request, 'quality_platform/eval_report_overview.html', context)
 
@@ -154,7 +154,7 @@ def eval_report_confusion(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part
+    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
     if EVAL_REPORT.evaluate_table is None:
         return render(request, 'quality_platform/eval_report_overview.html', context)
 
@@ -178,7 +178,7 @@ def eval_report_confusion_proportion(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part
+    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
     if EVAL_REPORT.evaluate_table is None:
         return render(request, 'quality_platform/eval_report_overview.html', context)
 
@@ -199,7 +199,7 @@ def eval_report_threshold(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part
+    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
     if EVAL_REPORT.evaluate_table is None:
         return render(request, 'quality_platform/eval_report_overview.html', context)
 
@@ -221,7 +221,7 @@ def eval_report_error(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part
+    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
     if EVAL_REPORT.evaluate_table is None:
         return render(request, 'quality_platform/eval_report_overview.html', context)
 
@@ -239,7 +239,7 @@ def eval_report_upload(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part
+    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
     if EVAL_REPORT.evaluate_table is None:
         return render(request, 'quality_platform/eval_report_overview.html', context)
 
