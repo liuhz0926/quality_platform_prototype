@@ -25,7 +25,7 @@ SECRET_KEY = 'm2q-$=@2x&wr+nlg0z#8%8@+jp!b2h)srqho5*601wgb)ymjzw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['quality.symanto.net']
 
 
 # Application definition
