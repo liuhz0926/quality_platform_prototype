@@ -159,8 +159,9 @@ class Overview:
 #         plt.savefig('quality_platform/static/confusion_matrix_raw.png')
 
 
-
-
+#truth = "/Users/liuhz0926/quality_platform_prototype/uploads/evaluate/pretrain_file/test.tsv"
+#predict = "http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predictions/zvepkd42JJVhJ-66E5T_Zw.predictions"
+#Overview(truth, predict, 1)
 
 
 #test = Overview('2.truthcopy.tsv','3.predictioncopy.tsv',1)

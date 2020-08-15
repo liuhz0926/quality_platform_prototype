@@ -32,12 +32,12 @@ class EvalPretrainFile(models.Model):
     TOKEN_CHOICE = (('word', 'word'),
                     ('char', 'char'),
                     ('transformer', 'transformer'))
-    tokenization = models.CharField(default='transformer', max_length=20, choices=TOKEN_CHOICE)
+    tokenization = models.CharField(default='char', max_length=20, choices=TOKEN_CHOICE)
 
     ARCH_CHOICE = (("cnn_char", "cnn_char"),
                    ("embed_bilstm_attend", "embed_bilstm_attend"),
                    ('transformer', 'transformer'))
-    architecture = models.CharField(default='transformer', max_length=50, choices=ARCH_CHOICE)
+    architecture = models.CharField(default='cnn_char', max_length=50, choices=ARCH_CHOICE)
 
     MODEL_CHOICE = (("bert-base-uncased", "bert-base-uncased"),
                     ("bert-base-cased", "bert-base-cased"),

@@ -17,13 +17,17 @@ def config_to_python(description="None",dataset="DE-sentiment-mixed",data_folder
 
     "architecture": architecture,
 
-    "batch_size": 50,
+    "batch_size": 8,
+
+    "embedding_size": 25,
 
     "pretrained_model": pretrained_model,
 
     "finetune": finetune,
 
-    "lr": 3e-5,
+    "lr": 3e-05,
+
+    "max_features": 100,
 
     "max_length": max_length,
 

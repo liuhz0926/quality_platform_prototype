@@ -52,9 +52,12 @@ def load_backend(prediction=False, pretrain=False, addition=False):
 def load_coco():
     # UNDER CONSTRUCTION
     test = Coco_request()
-    test.post_train()
-    test.get_status()
-
+    #test.post_train()
+    #test.get_status()
+    #test.post_predict()
+    test_file, predict_file = test.request_coco()
+    print(test_file)
+    print(predict_file)
     #pretrain_form = EvalPretrainFile.objects.last()
     #print(pretrain_form)
     #print(pretrain_form.tokenization)
