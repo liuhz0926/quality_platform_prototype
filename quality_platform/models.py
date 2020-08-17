@@ -29,6 +29,18 @@ class EvalPretrainFile(models.Model):
         validators=[MinValueValidator(2)]
     )
 
+    max_features = models.IntegerField(
+        default=100,
+        validators=[MinValueValidator(10)]
+    )
+
+    embedding_size = models.IntegerField(
+        default=25,
+        validators=[MinValueValidator(10)]
+    )
+
+
+
     TOKEN_CHOICE = (('word', 'word'),
                     ('char', 'char'),
                     ('transformer', 'transformer'))
@@ -42,7 +54,10 @@ class EvalPretrainFile(models.Model):
     MODEL_CHOICE = (("bert-base-uncased", "bert-base-uncased"),
                     ("bert-base-cased", "bert-base-cased"),
                     ("bert-multilingual-cased", "bert-multilingual-cased"),
-                    ("bert-base-german-cased", "bert-base-german-cased"))
-    pretrained_model = models.CharField(default="bert-base-uncased", max_length=50, choices=MODEL_CHOICE)
+                    ("bert-base-german-cased", "bert-base-german-cased"),
+                    )
+
+    # Only needs for pretrain_model for BERT
+    # pretrained_model = models.CharField(default="", max_length=50, choices=MODEL_CHOICE)
 
     finetune = models.BooleanField()

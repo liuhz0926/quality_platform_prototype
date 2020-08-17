@@ -24,7 +24,7 @@ class Coco_request:
         zip_directory = HOME_ADDRESS + self.pretrain_form.pretrain_file.url
         unzip_directory = HOME_ADDRESS + 'uploads/evaluate/pretrain_file/'
         unzip(zip_directory, unzip_directory)
-        train_labels = get_labels(unzip_directory + 'train.tsv')
+        self.train_labels = get_labels(unzip_directory + 'train.tsv')
 
         # HERE IS FOR THE SAMPLE TEST
         self.dataset_url = 'https://github.com/liuhz0926/quality_platform_prototype/raw/master/uploads/evaluate/pretrain_file/archive.zip'
@@ -33,20 +33,16 @@ class Coco_request:
                                            dataset=self.pretrain_form.pretrain_file.name,
                                            tokenization=self.pretrain_form.tokenization,
                                            architecture=self.pretrain_form.architecture,
-                                           pretrained_model=self.pretrain_form.pretrained_model,
+                                           # pretrained_model=self.pretrain_form.pretrained_model,
+                                           embedding_size = self.pretrain_form.embedding_size,
                                            finetune=self.pretrain_form.finetune,
+                                           max_features=self.pretrain_form.max_features,
                                            max_length=self.pretrain_form.max_length,
                                            epochs=self.pretrain_form.epochs,
                                            n_classes=self.pretrain_form.n_classes,
-                                           labels=train_labels
+                                           labels=self.train_labels
                                            )
 
-    def request_coco(self):
-        self.post_train()
-        self.check_status()
-        self.post_predict()
-
-        return self.test_file, self.predict_file
 
     def post_train(self):
         headers = {
@@ -55,7 +51,7 @@ class Coco_request:
             'Content-Type': 'application/json',
         }
 
-        print(self.data_model)
+        #print(self.data_model)
         #print(self.dataset_url)
         params = (
             ('dataset_url', self.dataset_url),
@@ -69,7 +65,7 @@ class Coco_request:
         )
 
         self.train_result = response.json()
-        print(self.train_result)
+        print('Training result:', self.train_result)
         self.task_id = self.train_result["task_id"]
         self.model_name = self.train_result["model_name"]
 
@@ -90,7 +86,7 @@ class Coco_request:
         )
 
         self.status = response.json()
-        print(self.status)
+        #print(self.status)
         return self.status['status']
 
 
@@ -110,17 +106,18 @@ class Coco_request:
                 files={"dataset": ('text.tsv', f, "text/tsv")})
 
         self.predict_file = response.json()['url']
+        print(self.predict_file)
 
 
     def check_status(self):
-        print('begin timer')
+        print('begin checking every two second')
         timer1 = time.time()
         timer2 = time.time()
         finish_training = False
 
         while not finish_training:
             if timer2 - timer1 >= 2:
-                print('two second and get status')
+                #print('two second and get status')
                 status = self.get_status()
                 print(status)
                 if status.endswith("done."):
@@ -130,7 +127,7 @@ class Coco_request:
             else:
                 timer2 = time.time()
 
-        print('done')
+        print('training is finished!')
 
 
 

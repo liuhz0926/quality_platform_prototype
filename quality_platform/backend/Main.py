@@ -42,9 +42,9 @@ class Eval_Report:
         self.add_threshold_accuracy = None
 
 
-    def load_report(self, truth_file, prediction_file, add_pred_file = None):
+    def load_report(self, truth_file, prediction_file, add_pred_file = None, labels = None):
         # overview page and confusion matrix
-        overview_list, confusion_list = self.load_overview(truth_file, prediction_file)
+        overview_list, confusion_list = self.load_overview(truth_file, prediction_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
         self.total_instance = overview_list[0]
         self.evaluate_table = overview_list[1]
         self.instance_class = overview_list[2]
@@ -54,10 +54,10 @@ class Eval_Report:
         self.normal_data = confusion_list[3]
 
 
-        self.load_threshold(truth_file, prediction_file, add_pred_file)
-        self.load_error(truth_file, prediction_file, add_pred_file)
+        self.load_threshold(truth_file, prediction_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
+        self.load_error(truth_file, prediction_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
         if add_pred_file:
-            add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file)
+            add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
             self.add_total_instance = add_overview_list[0]
             self.add_evaluate_table = add_overview_list[1]
             self.add_instance_class = add_overview_list[2]
@@ -68,14 +68,14 @@ class Eval_Report:
 
         return
 
-    def load_overview(self, truth_file, prediction_file):
+    def load_overview(self, truth_file, prediction_file, labels, predict = False, pretrain = False):
         '''
 
         :param truth_file: tsv file
         :param prediction_file: tsv file
         :return: call overview class to set up evaluation overview report
         '''
-        overview = Overview(truth_file, prediction_file, 1)
+        overview = Overview(truth_file, prediction_file, 1,labels=labels, predict = predict, pretrain = pretrain)
         total_instance = overview.total_instance('Truth')
         eval_dict = overview.evaluation()
         evaluate_table = make_eval_table(eval_dict, total_instance)
@@ -89,7 +89,7 @@ class Eval_Report:
 
         return overview_list, confusion_list
 
-    def load_threshold(self, truth_file, prediction_file, add_pred_file = None):
+    def load_threshold(self, truth_file, prediction_file, add_pred_file = None, predict = False, pretrain = False):
         '''
 
         :param truth_file: tsv file
@@ -97,23 +97,23 @@ class Eval_Report:
         :return: call threshold analysis class
         '''
         if add_pred_file:
-            threshold_analysis = Threshold_analysis(truth_file, prediction_file, add_pred_file)
+            threshold_analysis = Threshold_analysis(truth_file, prediction_file, add_pred_file, predict=predict, pretrain=pretrain)
             self.threshold, self.threshold_list, self.threshold_accuracy, self.add_threshold_accuracy = \
                 threshold_analysis.generate_theshold()
         else:
-            threshold_analysis = Threshold_analysis(truth_file, prediction_file)
+            threshold_analysis = Threshold_analysis(truth_file, prediction_file, predict=predict, pretrain=pretrain)
             self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
 
         return
 
-    def load_error(self, truth_file, prediction_file, add_pred_file = None):
+    def load_error(self, truth_file, prediction_file, add_pred_file = None, predict = False, pretrain = False):
         '''
 
         :param truth_file:
         :param prediction_file:
         :return: call error analysis
         '''
-        error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file)
+        error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file, predict = predict, pretrain = pretrain)
         self.error = error_analysis.gen_errors()
 
         return

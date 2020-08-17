@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 import pandas as pd
 import numpy as np
+import time
 from .forms import EvalFileForm, EvalAddFileForm, EvalPretrainForm
 from .models import EvalPredFile, EvalAddFile, EvalPretrainFile
 from .backend.Main import Eval_Report
@@ -17,14 +18,18 @@ def load_backend(prediction=False, pretrain=False, addition=False):
         uploaded_files = EvalPredFile.objects.last()
         truth_url = uploaded_files.truth_file.url
         prediction_url = uploaded_files.prediction_file.url
+        truth_file = home_address + truth_url
+        prediction_file = home_address + prediction_url
+        pretrain_labels = None
 
     # UNDER CONSTRUCTION
     if pretrain:
-        load_coco()
-        return
+        pretrain_labels, prediction_file = load_coco()
+        #print(prediction_file)
+        time.sleep(2)
+        truth_file = None
 
-    truth_file = home_address + truth_url
-    prediction_file = home_address + prediction_url
+
     #print(truth_file, prediction_file)
 
     if not addition:
@@ -42,29 +47,32 @@ def load_backend(prediction=False, pretrain=False, addition=False):
         addition_files = EvalAddFile.objects.last()
         add_pred_file = home_address + addition_files.addition_pred_file.url
         # set the new report
-        EVAL_REPORT.load_report(truth_file, prediction_file, add_pred_file)
+        EVAL_REPORT.load_report(truth_file, prediction_file, add_pred_file, labels = pretrain_labels)
 
     else:
-        EVAL_REPORT.load_report(truth_file, prediction_file)
+        EVAL_REPORT.load_report(truth_file, prediction_file, labels = pretrain_labels)
 
     return
 
 def load_coco():
     # UNDER CONSTRUCTION
-    test = Coco_request()
-    #test.post_train()
-    #test.get_status()
-    #test.post_predict()
-    test_file, predict_file = test.request_coco()
-    print(test_file)
-    print(predict_file)
-    #pretrain_form = EvalPretrainFile.objects.last()
-    #print(pretrain_form)
-    #print(pretrain_form.tokenization)
-    #print(pretrain_form.pretrain_file.url)
-    #print(pretrain_form.description)
-    #print(pretrain_form.n_classes)
-    #print(pretrain_form.pretrain_file.name)
+    # #test.post_train()
+    #     #test.get_status()
+    #     #test.post_predict()
+    #
+    #     #pretrain_form = EvalPretrainFile.objects.last()
+    #     #print(pretrain_form)
+    #     #print(pretrain_form.tokenization)
+    #     #print(pretrain_form.pretrain_file.url)
+    #     #print(pretrain_form.description)
+    #     #print(pretrain_form.n_classes)
+    #     #print(pretrain_form.pretrain_file.name)
+    coco_model = Coco_request()
+    coco_model.post_train()
+    coco_model.check_status()
+    coco_model.post_predict()
+    return coco_model.train_labels, coco_model.predict_file
+
 
 def set_report_title():
     '''
@@ -276,7 +284,6 @@ def eval_upload_pretrain(request):
         form = EvalPretrainForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-
             load_backend(pretrain=True)
             return redirect('platform-evaluate-report')
         pass

@@ -4,7 +4,14 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve,roc_auc_score,accuracy_score
 
 class Threshold_analysis:
-    def __init__(self,tfile, pfile, pfile1 = None,r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
+    def __init__(self,tfile, pfile, pfile1 = None,r_col=1, p_col=2, predict=False, pretrain=False):
+        if predict:
+            self.__predict_init__(tfile, pfile, pfile1, r_col, p_col)
+        if pretrain:
+            self.__predict_init__(tfile, pfile, pfile1, r_col, p_col)
+
+
+    def __predict_init__(self,tfile, pfile, pfile1 = None,r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
                                                     # result/class column, p_col stands for column of probablity
         if tfile[-3:] == "tsv":
             self.td = '\t' #td means delimeter for tfile

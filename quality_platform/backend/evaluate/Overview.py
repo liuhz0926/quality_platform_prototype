@@ -4,7 +4,15 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 
 class Overview:
-    def __init__(self,tfile, pfile, r_col): #tfile for truth file and pfile for prediction file, r_col stands for result/class column
+    def __init__(self,tfile=None, pfile=None, r_col=1, labels = None, predict=False, pretrain=False):
+        if predict:
+            self.__predict_init__(tfile, pfile, r_col)
+        if pretrain:
+            self.__pretrain_init__(pfile, r_col, labels)
+
+
+
+    def __predict_init__(self, tfile, pfile, r_col): #tfile for truth file and pfile for prediction file, r_col stands for result/class column
         if tfile[-3:] == "tsv":
             self.td = '\t' #td means delimeter for tfile
         elif tfile[-3:] == "csv":
@@ -20,8 +28,29 @@ class Overview:
             print('Wrong File Type')
             return
         self.tfile = pd.read_csv(tfile,sep=self.td,header=None)
+
         self.pfile = pd.read_csv(pfile,sep=self.pd,header=None)
         self.r_col = r_col
+
+    def __pretrain_init__(self, pfile, r_col, labels):
+        self.r_col = r_col
+        predict_df = pd.read_csv(pfile, sep='\t', header=0)
+        self.pfile = pd.DataFrame()
+        self.pfile['predicted_label'] = predict_df['predicted_label']
+        self.pfile['probability'] = predict_df[labels].max(axis=1)
+        self.pfile['id'] = self.pfile.index + 1
+        self.pfile = self.pfile[['id','predicted_label','probability']]
+        #p_file['probability'] = predict_df[["", "B"]].max(axis=1)
+        print(self.pfile)
+        self.tfile = pd.DataFrame()
+        self.tfile['id'] = self.pfile['id']
+        self.tfile['label'] = predict_df['label']
+        self.tfile['content'] = predict_df['text']
+        print(self.tfile)
+
+
+
+
     def total_instance(self,type): # type should be Truth or Prediction
         if type == 'Truth':
             file = self.tfile
@@ -159,9 +188,7 @@ class Overview:
 #         plt.savefig('quality_platform/static/confusion_matrix_raw.png')
 
 
-#truth = "/Users/liuhz0926/quality_platform_prototype/uploads/evaluate/pretrain_file/test.tsv"
-#predict = "http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predictions/zvepkd42JJVhJ-66E5T_Zw.predictions"
-#Overview(truth, predict, 1)
+
 
 
 #test = Overview('2.truthcopy.tsv','3.predictioncopy.tsv',1)
@@ -169,3 +196,10 @@ class Overview:
 #test.evaluation()
 #test.total_instance('Truth')
 #test.instance_per_class('Truth')
+
+
+#file = 'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predictions/wuMGbawDPz4niPiqMSzcIA.predictions'
+
+#labels = ['positive', 'negative']
+
+#Overview('', file, 1, labels=labels, pretrain=True)

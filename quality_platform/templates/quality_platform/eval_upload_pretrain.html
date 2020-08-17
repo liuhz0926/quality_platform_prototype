@@ -8,7 +8,9 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'quality_platform/modal.css' %}">
 
+
     <div class="row">
+
         <div>
             <form id="upload_form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -16,6 +18,7 @@
                 <button id="pretrain_submit" type="submit">Submit</button>
             </form>
         </div>
+        <h6>(Note: the default here is used to test for Coco server, pretrain_model used for BERT is removed temporarily)</h6>
     </div>
 
 

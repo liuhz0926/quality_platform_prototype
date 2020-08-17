@@ -1,6 +1,18 @@
 import json
 
-def config_to_python(description="None",dataset="DE-sentiment-mixed",data_folder="/data/research/users/abasile/pseudo-home/coco-data", tokenization="transformer",architecture="transformer",pretrained_model="bert-base-cased",finetune=True,max_length=100,epochs=15,n_classes=2,labels=[1,0]):
+def config_to_python(description="None",
+                     dataset="DE-sentiment-mixed",
+                     data_folder="/data/research/users/abasile/pseudo-home/coco-data",
+                     tokenization="char",
+                     architecture="cnn_char",
+                     embedding_size = 25,
+                     pretrained_model="bert-base-cased",
+                     finetune=True,
+                     max_features = 100,
+                     max_length=10,
+                     epochs=15,
+                     n_classes=2,
+                     labels=[1,0]):
     my_json = {
 
     "description": description,
@@ -19,15 +31,17 @@ def config_to_python(description="None",dataset="DE-sentiment-mixed",data_folder
 
     "batch_size": 8,
 
-    "embedding_size": 25,
+    # Only need when the model is CNN
+    "embedding_size": embedding_size,
 
-    "pretrained_model": pretrained_model,
+    # Only need when the model select BERT
+    # "pretrained_model": pretrained_model,
 
     "finetune": finetune,
 
     "lr": 3e-05,
 
-    "max_features": 100,
+    "max_features": max_features,
 
     "max_length": max_length,
 

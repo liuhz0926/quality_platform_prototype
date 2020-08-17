@@ -16,11 +16,13 @@ class EvalPretrainForm(forms.ModelForm):
         model = EvalPretrainFile
         fields = ('pretrain_file',
                   'description',
+                  'max_features',
                   'max_length',
+                  'embedding_size',
                   'epochs',
                   'n_classes',
                   'tokenization',
                   'architecture',
-                  'pretrained_model',
+                  # 'pretrained_model',
                   'finetune',
                   )

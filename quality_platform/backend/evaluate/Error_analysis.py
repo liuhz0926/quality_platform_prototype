@@ -9,7 +9,15 @@ from sklearn.metrics import roc_curve,roc_auc_score,accuracy_score
 #pd.set_option('display.max_colwidth', -1)
 
 class Error_analysis:
-    def __init__(self,tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
+    def __init__(self, tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2, predict=False, pretrain=False):
+
+        if predict:
+            self.__predict_init__(tfile, pfile, pfile2=pfile2, id_col = id_col, r_col=r_col, p_col=p_col)
+        if pretrain:
+            self.__predict_init__(tfile, pfile, pfile2=pfile2, id_col = id_col, r_col=r_col, p_col=p_col)
+
+
+    def __predict_init__(self,tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
                                                     # result/class column, p_col stands for column of probablity
         if tfile[-3:] == "tsv":
             self.td = '\t' #td means delimeter for tfile
@@ -36,15 +44,8 @@ class Error_analysis:
         self.id_col = id_col
         self.r_col = r_col
         self.p_col = p_col
-    # def gen_errors(self,file = "tfile"): # if entered truth file we will give instance ID and content. if entered prediction file
-    #                             # we will give isntance ID and probability
-    #     if file == "tfile":
-    #         rfile = self.tfile
-    #         cfile = self.pfile
-    #     elif file == "pfile":
-    #         rfile = self.pfile
-    #         cfile = self.tfile
-    #     # rfile for result file and cfile for compare file
+
+
     def gen_errors(self):
 
         column = self.tfile.iloc[:, self.r_col]
@@ -74,6 +75,17 @@ class Error_analysis:
             else:
                 dict['probability'] = round(float(dict['probability']), 5)
         return error_data
+
+
+    # def gen_errors(self,file = "tfile"): # if entered truth file we will give instance ID and content. if entered prediction file
+    #                             # we will give isntance ID and probability
+    #     if file == "tfile":
+    #         rfile = self.tfile
+    #         cfile = self.pfile
+    #     elif file == "pfile":
+    #         rfile = self.pfile
+    #         cfile = self.tfile
+    #     # rfile for result file and cfile for compare file
 
 #test = Error_analysis('2.truth.tsv','3.prediction.tsv')
 #test.gen_erros()
