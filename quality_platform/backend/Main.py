@@ -57,7 +57,7 @@ class Eval_Report:
         self.load_threshold(truth_file, prediction_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
         self.load_error(truth_file, prediction_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
         if add_pred_file:
-            add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
+            add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
             self.add_total_instance = add_overview_list[0]
             self.add_evaluate_table = add_overview_list[1]
             self.add_instance_class = add_overview_list[2]
@@ -68,7 +68,7 @@ class Eval_Report:
 
         return
 
-    def load_overview(self, truth_file, prediction_file, labels, predict = False, pretrain = False):
+    def load_overview(self, truth_file, prediction_file, labels = None, predict = False, pretrain = False):
         '''
 
         :param truth_file: tsv file

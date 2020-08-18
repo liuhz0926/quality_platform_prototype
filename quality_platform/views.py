@@ -137,14 +137,12 @@ def eval_report_overview(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.evaluate_table is None:
-        return render(request, 'quality_platform/eval_report_overview.html', context)
-
     # make an evaluation table
     context['evaluation'] = EVAL_REPORT.evaluate_table
     context['total_instance'] = EVAL_REPORT.total_instance
     context['instance_per_class'] = EVAL_REPORT.instance_class
+    context['predict'] = EVAL_REPORT.predict
+
 
     if EVAL_REPORT.add_total_instance != None:
         context['add_evaluation'] = EVAL_REPORT.add_evaluate_table
@@ -165,12 +163,9 @@ def eval_report_confusion(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.evaluate_table is None:
-        return render(request, 'quality_platform/eval_report_overview.html', context)
-
     context['confusion_labels'] = EVAL_REPORT.confusion_labels
     context['confusion_data'] = EVAL_REPORT.confusion_data
+    context['predict'] = EVAL_REPORT.predict
 
     if EVAL_REPORT.add_confusion_labels:
         context['add_confusion_labels'] = EVAL_REPORT.add_confusion_labels
@@ -189,12 +184,9 @@ def eval_report_confusion_proportion(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.evaluate_table is None:
-        return render(request, 'quality_platform/eval_report_overview.html', context)
-
     context['normal_labels'] = EVAL_REPORT.normal_labels
     context['normal_data'] = EVAL_REPORT.normal_data
+    context['predict'] = EVAL_REPORT.predict
 
     if EVAL_REPORT.add_confusion_labels:
         context['add_normal_labels'] = EVAL_REPORT.add_normal_labels
@@ -211,12 +203,13 @@ def eval_report_threshold(request):
     context = set_report_title()
 
     # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.evaluate_table is None:
-        return render(request, 'quality_platform/eval_report_overview.html', context)
+    if EVAL_REPORT.threshold_list is None:
+        return redirect('platform-evaluate-report')
 
     context['threshold'] = EVAL_REPORT.threshold
     context['threshold_list'] = EVAL_REPORT.threshold_list
     context['threshold_accuracy'] = EVAL_REPORT.threshold_accuracy
+    context['predict'] = EVAL_REPORT.predict
 
     if EVAL_REPORT.add_threshold_accuracy:
         context['add_threshold_accuracy'] = EVAL_REPORT.add_threshold_accuracy
@@ -233,10 +226,11 @@ def eval_report_error(request):
     context = set_report_title()
 
     # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.evaluate_table is None:
-        return render(request, 'quality_platform/eval_report_overview.html', context)
+    if EVAL_REPORT.error is None:
+        return redirect('platform-evaluate-report')
 
     context['error'] = EVAL_REPORT.error
+    context['predict'] = EVAL_REPORT.predict
     if EVAL_REPORT.add_threshold_accuracy:
         context['addition'] = 1
     return render(request, 'quality_platform/eval_report_error.html', context)
@@ -249,10 +243,6 @@ def eval_report_upload(request):
     :return:
     '''
     context = set_report_title()
-
-    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.evaluate_table is None:
-        return render(request, 'quality_platform/eval_report_overview.html', context)
 
     if request.method == 'POST':
         form = EvalAddFileForm(request.POST, request.FILES)

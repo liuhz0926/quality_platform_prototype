@@ -1,23 +1,39 @@
 {% extends "quality_platform/evaluate_base.html" %}
 {% block content %}
-
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" href="{% url 'platform-evaluate-report' %}">Overview</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-report-confusion' %}">Confusion Matrix</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-report-threshold' %}">Threshold Analysis</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-report-error' %}">Error Analysis</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'platform-eval-report-upload-new' %}">Upload another predicted file</a>
-        </li>
-    </ul>
+    {% if predict %}
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'platform-evaluate-report' %}">Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'platform-eval-report-confusion' %}">Confusion Matrix</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'platform-eval-report-threshold' %}">Threshold Analysis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'platform-eval-report-error' %}">Error Analysis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'platform-eval-report-upload-new' %}">Upload another predicted file</a>
+            </li>
+        </ul>
+    {% else %}
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'platform-evaluate-report' %}">Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'platform-eval-report-confusion' %}">Confusion Matrix</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'platform-eval-report-threshold' %}">Threshold Analysis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'platform-eval-report-error' %}">Error Analysis</a>
+            </li>
+        </ul>
+    {% endif %}
 
     <div class="container">
         {% if add_evaluation != null %}
