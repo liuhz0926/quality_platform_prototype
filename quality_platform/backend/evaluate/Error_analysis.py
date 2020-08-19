@@ -9,12 +9,12 @@ from sklearn.metrics import roc_curve,roc_auc_score,accuracy_score
 #pd.set_option('display.max_colwidth', -1)
 
 class Error_analysis:
-    def __init__(self, tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2, predict=False, pretrain=False):
+    def __init__(self, tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2, labels = None, predict=False, pretrain=False):
 
         if predict:
             self.__predict_init__(tfile, pfile, pfile2=pfile2, id_col = id_col, r_col=r_col, p_col=p_col)
         if pretrain:
-            self.__predict_init__(tfile, pfile, pfile2=pfile2, id_col = id_col, r_col=r_col, p_col=p_col)
+            self.__pretrain_init__(pfile, labels, id_col, r_col, p_col)
 
 
     def __predict_init__(self,tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
@@ -44,6 +44,24 @@ class Error_analysis:
         self.id_col = id_col
         self.r_col = r_col
         self.p_col = p_col
+
+    def __pretrain_init__(self, pfile, labels, id_col = 0, r_col=1, p_col=2):
+        self.id_col = id_col
+        self.r_col = r_col
+        self.p_col = p_col
+        self.second = False
+        self.pfile2 = None
+        predict_df = pd.read_csv(pfile, sep='\t', header=0)
+        self.pfile = pd.DataFrame()
+        self.pfile['predicted_label'] = predict_df['predicted_label']
+        self.pfile['probability'] = predict_df[labels].max(axis=1)
+        self.pfile['id'] = self.pfile.index + 1
+        self.pfile = self.pfile[['id','predicted_label','probability']]
+        #p_file['probability'] = predict_df[["", "B"]].max(axis=1)
+        self.tfile = pd.DataFrame()
+        self.tfile['id'] = self.pfile['id']
+        self.tfile['label'] = predict_df['label']
+        self.tfile['content'] = predict_df['text']
 
 
     def gen_errors(self):

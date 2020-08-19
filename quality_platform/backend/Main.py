@@ -54,8 +54,8 @@ class Eval_Report:
         self.normal_data = confusion_list[3]
 
 
-        self.load_threshold(truth_file, prediction_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
-        self.load_error(truth_file, prediction_file, add_pred_file, predict=self.predict, pretrain=self.pretrain)
+        self.load_threshold(truth_file, prediction_file, add_pred_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
+        self.load_error(truth_file, prediction_file, add_pred_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
         if add_pred_file:
             add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
             self.add_total_instance = add_overview_list[0]
@@ -89,7 +89,7 @@ class Eval_Report:
 
         return overview_list, confusion_list
 
-    def load_threshold(self, truth_file, prediction_file, add_pred_file = None, predict = False, pretrain = False):
+    def load_threshold(self, truth_file, prediction_file, add_pred_file = None, labels = None, predict = False, pretrain = False):
         '''
 
         :param truth_file: tsv file
@@ -101,19 +101,19 @@ class Eval_Report:
             self.threshold, self.threshold_list, self.threshold_accuracy, self.add_threshold_accuracy = \
                 threshold_analysis.generate_theshold()
         else:
-            threshold_analysis = Threshold_analysis(truth_file, prediction_file, predict=predict, pretrain=pretrain)
+            threshold_analysis = Threshold_analysis(truth_file, prediction_file, labels = labels, predict=predict, pretrain=pretrain)
             self.threshold, self.threshold_list, self.threshold_accuracy = threshold_analysis.generate_theshold()
 
         return
 
-    def load_error(self, truth_file, prediction_file, add_pred_file = None, predict = False, pretrain = False):
+    def load_error(self, truth_file, prediction_file, add_pred_file = None, labels = None, predict = False, pretrain = False):
         '''
 
         :param truth_file:
         :param prediction_file:
         :return: call error analysis
         '''
-        error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file, predict = predict, pretrain = pretrain)
+        error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file, labels = labels, predict = predict, pretrain = pretrain)
         self.error = error_analysis.gen_errors()
 
         return

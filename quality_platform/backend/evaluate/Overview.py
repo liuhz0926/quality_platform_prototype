@@ -41,12 +41,12 @@ class Overview:
         self.pfile['id'] = self.pfile.index + 1
         self.pfile = self.pfile[['id','predicted_label','probability']]
         #p_file['probability'] = predict_df[["", "B"]].max(axis=1)
-        print(self.pfile)
+        #print(self.pfile)
         self.tfile = pd.DataFrame()
         self.tfile['id'] = self.pfile['id']
         self.tfile['label'] = predict_df['label']
         self.tfile['content'] = predict_df['text']
-        print(self.tfile)
+        #print(self.tfile)
 
 
 

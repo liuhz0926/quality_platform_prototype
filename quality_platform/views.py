@@ -202,10 +202,6 @@ def eval_report_threshold(request):
     '''
     context = set_report_title()
 
-    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.threshold_list is None:
-        return redirect('platform-evaluate-report')
-
     context['threshold'] = EVAL_REPORT.threshold
     context['threshold_list'] = EVAL_REPORT.threshold_list
     context['threshold_accuracy'] = EVAL_REPORT.threshold_accuracy
@@ -224,10 +220,6 @@ def eval_report_error(request):
     :return:
     '''
     context = set_report_title()
-
-    # This is temporary for unfinished pretrain part (Need to delete after finish pretrain)
-    if EVAL_REPORT.error is None:
-        return redirect('platform-evaluate-report')
 
     context['error'] = EVAL_REPORT.error
     context['predict'] = EVAL_REPORT.predict

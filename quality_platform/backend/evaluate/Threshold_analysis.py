@@ -4,11 +4,13 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve,roc_auc_score,accuracy_score
 
 class Threshold_analysis:
-    def __init__(self,tfile, pfile, pfile1 = None,r_col=1, p_col=2, predict=False, pretrain=False):
+    def __init__(self,tfile=None, pfile=None, pfile1 = None,r_col=1, p_col=2, labels = None, predict=False, pretrain=False):
         if predict:
             self.__predict_init__(tfile, pfile, pfile1, r_col, p_col)
         if pretrain:
-            self.__predict_init__(tfile, pfile, pfile1, r_col, p_col)
+            self.__pretrain_init__(pfile, labels, r_col, p_col)
+        #print(self.pfile)
+        #print(self.tfile)
 
 
     def __predict_init__(self,tfile, pfile, pfile1 = None,r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
@@ -36,6 +38,24 @@ class Threshold_analysis:
         self.r_col = r_col
         self.p_col = p_col
 
+    def __pretrain_init__(self, pfile, labels, r_col=1, p_col=2):
+        self.r_col = r_col
+        self.p_col = p_col
+        self.two_model = False
+        predict_df = pd.read_csv(pfile, sep='\t', header=0)
+        self.pfile = pd.DataFrame()
+        self.pfile['predicted_label'] = predict_df['predicted_label']
+        self.pfile['probability'] = predict_df[labels].max(axis=1)
+        self.pfile['id'] = self.pfile.index + 1
+        self.pfile = self.pfile[['id','predicted_label','probability']]
+        #p_file['probability'] = predict_df[["", "B"]].max(axis=1)
+        self.tfile = pd.DataFrame()
+        self.tfile['id'] = self.pfile['id']
+        self.tfile['label'] = predict_df['label']
+        self.tfile['content'] = predict_df['text']
+
+
+
     def generate_theshold(self):
         if self.two_model:
             data = pd.concat([self.tfile.iloc[:,self.r_col],self.pfile.iloc[:, self.r_col],self.pfile.iloc[:, self.p_col],self.pfile1.iloc[:, self.r_col],self.pfile1.iloc[:, self.p_col]],axis=1)
@@ -60,6 +80,7 @@ class Threshold_analysis:
             instance = len(temp.index)
             percent = len(temp.index)/total*100
             accuracy = accuracy_score(temp.iloc[:,0],temp.iloc[:,1])
+
             threshold_list.append(threshold)
             accuracy_list.append(round(accuracy, 3))
             if self.two_model:
@@ -73,7 +94,9 @@ class Threshold_analysis:
             else:
                 result.append([threshold, instance, round(percent, 3), round(accuracy, 3)])
             # result.append("Threshold at "+str(i/100)+": total instance = "+ str(len(temp.index)) + " ("+str(round(percent, 3))+"%), accuracy = " + str(round(accuracy, 3)))
-        #print(result)
+        print(result)
+        print(threshold_list)
+        print(accuracy_list)
         if self.two_model:
             return result, threshold_list, accuracy_list, accuracy_list1
         return result, threshold_list, accuracy_list
@@ -94,3 +117,7 @@ class Threshold_analysis:
 #test.generate_theshold()
 #test.generate_roc_curve('yes')
 #test.generate_auc_curve()
+pfile = 'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predictions/bpPTl9tKooV1dqeGgL6jUQ.predictions'
+labels = ['positive', 'negative']
+test = Threshold_analysis(pfile=pfile, labels=labels, pretrain=True)
+test.generate_theshold()
