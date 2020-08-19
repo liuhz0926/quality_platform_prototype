@@ -94,9 +94,9 @@ class Threshold_analysis:
             else:
                 result.append([threshold, instance, round(percent, 3), round(accuracy, 3)])
             # result.append("Threshold at "+str(i/100)+": total instance = "+ str(len(temp.index)) + " ("+str(round(percent, 3))+"%), accuracy = " + str(round(accuracy, 3)))
-        print(result)
-        print(threshold_list)
-        print(accuracy_list)
+        #print(result)
+        #print(threshold_list)
+        #print(accuracy_list)
         if self.two_model:
             return result, threshold_list, accuracy_list, accuracy_list1
         return result, threshold_list, accuracy_list
@@ -117,7 +117,8 @@ class Threshold_analysis:
 #test.generate_theshold()
 #test.generate_roc_curve('yes')
 #test.generate_auc_curve()
-pfile = 'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predictions/bpPTl9tKooV1dqeGgL6jUQ.predictions'
-labels = ['positive', 'negative']
-test = Threshold_analysis(pfile=pfile, labels=labels, pretrain=True)
-test.generate_theshold()
+
+#pfile = 'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predictions/bpPTl9tKooV1dqeGgL6jUQ.predictions'
+#labels = ['positive', 'negative']
+#test = Threshold_analysis(pfile=pfile, labels=labels, pretrain=True)
+#test.generate_theshold()
