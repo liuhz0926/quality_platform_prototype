@@ -9,7 +9,7 @@ The platform contains three steps of methodology: Evaluate, Stress, and Retrain.
 
 ## Updates
 
-On August 21st, 2020. The prototype contains the first step, Evaluate for both uploading predict files or using Coco Server to train
+On August 21st, 2020. The prototype contains the first step: Evaluate for both uploading predict files or using Coco Server to train
 
 ## Environment
 
