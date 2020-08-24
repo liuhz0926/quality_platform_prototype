@@ -3,9 +3,9 @@
 This Quality Platform project is designed to unify and homogenize the evaluation of the language model. The project uses the Django framework. 
 
 The platform contains three steps of methodology: Evaluate, Stress, and Retrain.
-* Evaluate user's language models, compare them and analyze the error
-* Use What-if scenarios to stress user's models and find improvements points
-* Retrain user's models with the acquired knowledge and assign the proper weights
+* Evaluate: evaluate user's language models, compare them and analyze the error
+* Stress: use What-if scenarios to stress user's models and find improvements points
+* Retrain: retrain user's models with the acquired knowledge and assign the proper weights
 
 ## Updates
 
