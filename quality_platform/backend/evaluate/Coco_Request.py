@@ -16,6 +16,12 @@ HOME_ADDRESS = '~/quality_platform_prototype/'
 
 class Coco_request:
     def __init__(self):
+        '''
+        get the zip file and the model form from front end after uploading and submit the form
+        unzip the file and read the label
+        (for now, because the project is running locally, we are using the github url)
+        set the data_model in json format
+        '''
         self.pretrain_form = EvalPretrainFile.objects.last()
         self.dataset_url = HOME_URL + self.pretrain_form.pretrain_file.url
 
@@ -45,14 +51,11 @@ class Coco_request:
 
 
     def post_train(self):
-        headers = {
-            'accept': 'application/json',
-            'SYMANTO_QP_ACCESS_TOKEN': 'QhV37mPdcz',
-            'Content-Type': 'application/json',
-        }
+        '''
+        Make a cURL Post/Train request to the Coco server from python
+        :return:
+        '''
 
-        #print(self.data_model)
-        #print(self.dataset_url)
         params = (
             ('dataset_url', self.dataset_url),
         )
@@ -71,10 +74,11 @@ class Coco_request:
 
 
     def get_status(self):
-        headers = {
-            'accept': 'application/json',
-            'SYMANTO_QP_ACCESS_TOKEN': 'QhV37mPdcz',
-        }
+        '''
+        Make a cURL Get/Status request to the Coco server from python
+        :return:
+        '''
+
         params = {
             ('task_id', self.task_id),
         }
@@ -86,11 +90,15 @@ class Coco_request:
         )
 
         self.status = response.json()
-        #print(self.status)
+
         return self.status['status']
 
 
     def post_predict(self):
+        '''
+        Make a cURL Post/Predict request to the Coco server from python
+        :return:
+        '''
 
         self.test_file = os.path.expanduser(HOME_ADDRESS + 'uploads/evaluate/pretrain_file/test.tsv')
 
@@ -110,6 +118,11 @@ class Coco_request:
 
 
     def check_status(self):
+        '''
+        Setup a timer to check status every 2 second
+        run it until the training is finished
+        :return:
+        '''
         print('begin checking every two second')
         timer1 = time.time()
         timer2 = time.time()
@@ -117,7 +130,6 @@ class Coco_request:
 
         while not finish_training:
             if timer2 - timer1 >= 2:
-                #print('two second and get status')
                 status = self.get_status()
                 print(status)
                 if status.endswith("done."):

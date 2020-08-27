@@ -1,24 +1,37 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics import roc_curve,roc_auc_score,accuracy_score
 
-#pd.set_option('display.max_rows', None)
-#pd.set_option('display.max_columns', None)
-#pd.set_option('display.width', None)
-#pd.set_option('display.max_colwidth', -1)
+
 
 class Error_analysis:
     def __init__(self, tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2, labels = None, predict=False, pretrain=False):
+        '''
+        Create truth file dataframe (id label content) and predit file dataframe (id predict_label probablity)
 
+        :param tfile: truth file
+        :param pfile: predicted file
+        :param pfile1: addition predicted file
+        :param r_col: int, result/class column,  constant set for pandas
+        :param p_col: int, column of probablity, constant set for pandas
+        :param labels: list of classification labels
+        :param predict: boolean
+        :param pretrain: boolean
+        '''
         if predict:
             self.__predict_init__(tfile, pfile, pfile2=pfile2, id_col = id_col, r_col=r_col, p_col=p_col)
         if pretrain:
             self.__pretrain_init__(pfile, labels, id_col, r_col, p_col)
 
 
-    def __predict_init__(self,tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2): #tfile for truth file and pfile for prediction file, r_col stands for
-                                                    # result/class column, p_col stands for column of probablity
+    def __predict_init__(self,tfile, pfile, pfile2=None, id_col = 0, r_col=1, p_col=2):
+        '''
+
+        :param tfile: truth file
+        :param pfile: predicted file
+        :param pfile1: addition predicted file
+        :param r_col: int, result/class column,  constant set for pandas
+        :param p_col: int, column of probablity, constant set for pandas
+        '''
         if tfile[-3:] == "tsv":
             self.td = '\t' #td means delimeter for tfile
         elif tfile[-3:] == "csv":
@@ -46,6 +59,13 @@ class Error_analysis:
         self.p_col = p_col
 
     def __pretrain_init__(self, pfile, labels, id_col = 0, r_col=1, p_col=2):
+        '''
+
+        :param pfile: predicted file, the url coco return
+        :param r_col: int, result/class column,  constant set for pandas
+        :param p_col: int, column of probablity, constant set for pandas
+        :param labels: list of classification labels
+        '''
         self.id_col = id_col
         self.r_col = r_col
         self.p_col = p_col
@@ -57,7 +77,6 @@ class Error_analysis:
         self.pfile['probability'] = predict_df[labels].max(axis=1)
         self.pfile['id'] = self.pfile.index + 1
         self.pfile = self.pfile[['id','predicted_label','probability']]
-        #p_file['probability'] = predict_df[["", "B"]].max(axis=1)
         self.tfile = pd.DataFrame()
         self.tfile['id'] = self.pfile['id']
         self.tfile['label'] = predict_df['label']
@@ -65,7 +84,12 @@ class Error_analysis:
 
 
     def gen_errors(self):
-
+        '''
+        Generate Error Analysis
+        The error table contains: ID, Actual Class, Predicted Class, Probability, Content
+        If there is another predicetd file, it would contain another predicted label and its probability
+        :return: the error table
+        '''
         column = self.tfile.iloc[:, self.r_col]
         misclassified = np.where(column != self.pfile.iloc[:, self.r_col])
         if self.second:
@@ -94,18 +118,5 @@ class Error_analysis:
                 dict['probability'] = round(float(dict['probability']), 5)
         return error_data
 
-
-    # def gen_errors(self,file = "tfile"): # if entered truth file we will give instance ID and content. if entered prediction file
-    #                             # we will give isntance ID and probability
-    #     if file == "tfile":
-    #         rfile = self.tfile
-    #         cfile = self.pfile
-    #     elif file == "pfile":
-    #         rfile = self.pfile
-    #         cfile = self.tfile
-    #     # rfile for result file and cfile for compare file
-
-#test = Error_analysis('2.truth.tsv','3.prediction.tsv')
-#test.gen_erros()
 
 

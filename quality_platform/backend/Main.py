@@ -1,12 +1,12 @@
-import pandas as pd
-import numpy as np
-import json
 from .evaluate.Overview import Overview
 from .evaluate.Threshold_analysis import Threshold_analysis
 from .evaluate.Error_analysis import Error_analysis
 
 
 class Eval_Report:
+    '''
+        This class is the main report class help to generate report and call the backend models
+    '''
     def __init__(self):
         # Mark if it is for predict file or pretrain file
         self.predict = None
@@ -43,6 +43,15 @@ class Eval_Report:
 
 
     def load_report(self, truth_file, prediction_file, add_pred_file = None, labels = None):
+        '''
+        Loading the four section report
+
+        :param truth_file: uploaded from the front end (None for pretrain mode)
+        :param prediction_file: uploaded from the front end
+        :param add_pred_file: another predicted file in the predicted file mode
+        :param labels: list of class for classification (for pretrain mode)
+        :return:
+        '''
         # overview page and confusion matrix
         overview_list, confusion_list = self.load_overview(truth_file, prediction_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
         self.total_instance = overview_list[0]
@@ -53,10 +62,13 @@ class Eval_Report:
         self.normal_labels = confusion_list[2]
         self.normal_data = confusion_list[3]
 
-
+        # threshold analysis and error analysis
         self.load_threshold(truth_file, prediction_file, add_pred_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
         self.load_error(truth_file, prediction_file, add_pred_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
+
         if add_pred_file:
+            # call overview again
+            # threshold analysis and error analysis would directly setup the data for addition predict file
             add_overview_list, add_confusion_list = self.load_overview(truth_file, add_pred_file, labels = labels, predict=self.predict, pretrain=self.pretrain)
             self.add_total_instance = add_overview_list[0]
             self.add_evaluate_table = add_overview_list[1]
@@ -70,10 +82,15 @@ class Eval_Report:
 
     def load_overview(self, truth_file, prediction_file, labels = None, predict = False, pretrain = False):
         '''
+        Loading overview reports
 
-        :param truth_file: tsv file
-        :param prediction_file: tsv file
-        :return: call overview class to set up evaluation overview report
+        :param truth_file: tsv file from front end
+        :param prediction_file: tsv file from front end
+        :param labels: list of class for classification (for pretrain mode)
+        :param predict: boolean
+        :param pretrain: boolean
+        :return: overview_list: the list used for creating overview table
+                confusion_list: confusion table data in order to put in highcharts
         '''
         overview = Overview(truth_file, prediction_file, 1,labels=labels, predict = predict, pretrain = pretrain)
         total_instance = overview.total_instance('Truth')
@@ -91,10 +108,16 @@ class Eval_Report:
 
     def load_threshold(self, truth_file, prediction_file, add_pred_file = None, labels = None, predict = False, pretrain = False):
         '''
+        Loading threshold analysis
+        if there is addition predicted file, it would set up the addition threshold accuracy in order to compare
 
-        :param truth_file: tsv file
-        :param prediction_file: tsv file
-        :return: call threshold analysis class
+        :param truth_file: tsv file from front end
+        :param prediction_file: tsv file from front end
+        :param add_pred_file:
+        :param labels: list of class for classification (for pretrain mode)
+        :param predict: boolean
+        :param pretrain: boolean
+        :return:
         '''
         if add_pred_file:
             threshold_analysis = Threshold_analysis(truth_file, prediction_file, add_pred_file, predict=predict, pretrain=pretrain)
@@ -108,10 +131,15 @@ class Eval_Report:
 
     def load_error(self, truth_file, prediction_file, add_pred_file = None, labels = None, predict = False, pretrain = False):
         '''
+        Loading error analysis
 
-        :param truth_file:
-        :param prediction_file:
-        :return: call error analysis
+        :param truth_file: tsv file from front end
+        :param prediction_file: tsv file from front end
+        :param add_pred_file:
+        :param labels: list of class for classification (for pretrain mode)
+        :param predict: boolean
+        :param pretrain: boolean
+        :return:
         '''
         error_analysis = Error_analysis(truth_file, prediction_file, add_pred_file, labels = labels, predict = predict, pretrain = pretrain)
         self.error = error_analysis.gen_errors()
@@ -122,11 +150,13 @@ class Eval_Report:
 # helper functions:
 def make_eval_table(eval_dict, total_instance):
     '''
-        make a list of lists of each row in the evaluation table
-    :param eval_dict: dict of dict
-           total_instance: int
-    :return: list of list
+    make a list of lists of each row in the evaluation table
+
+    :param eval_dict: dict for different evaluation scores
+    :param total_instance: int for how many instance in total
+    :return: eval_table, list of list
     '''
+
     # init by the key
     eval_table = [[key] for key in eval_dict.keys()]
 

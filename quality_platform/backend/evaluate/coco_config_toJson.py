@@ -13,6 +13,28 @@ def config_to_python(description="None",
                      epochs=15,
                      n_classes=2,
                      labels=[1,0]):
+    '''
+    Make the data model for Coco Server into json format
+    Read the data from front end
+
+    :param description: str
+    :param dataset: str, dataset name
+    :param data_folder: str
+    :param tokenization: str
+    :param architecture: str
+    :param embedding_size: int
+    :param pretrained_model: str
+    :param finetune: boolean
+    :param max_features:int
+    :param max_length:int
+    :param epochs: int
+    :param n_classes: int
+    :param labels: list of labels
+    :return:
+    '''
+
+
+
     my_json = {
 
     "description": description,
@@ -62,8 +84,6 @@ def config_to_python(description="None",
     "GPUs": "0"
 
     }
-    # with open('config.json','w') as file:
-        # json.dump(my_json,file,ensure_ascii=False)
+
     return json.dumps(my_json)
 
-# print(config_to_python())

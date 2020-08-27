@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-import pandas as pd
-import numpy as np
 import time
 from .forms import EvalFileForm, EvalAddFileForm, EvalPretrainForm
 from .models import EvalPredFile, EvalAddFile, EvalPretrainFile
@@ -10,7 +8,17 @@ from .backend.evaluate.Coco_Request import Coco_request
 
 EVAL_REPORT = Eval_Report()
 
-def load_backend(prediction=False, pretrain=False, addition=False):
+def load_evaluate(prediction=False, pretrain=False, addition=False):
+    '''
+    Loading the Evaluation Reports
+    First check the predicted mode or pretrain mode, contains addition predicted file or not
+    Then generate the EVAL_REPORT objects and load reports from Main in the backend folder
+
+    :param prediction: boolean
+    :param pretrain: boolean
+    :param addition: boolean
+    :return:
+    '''
     home_address = '~/quality_platform_prototype/'
 
     # get the last uploaded files
@@ -22,15 +30,13 @@ def load_backend(prediction=False, pretrain=False, addition=False):
         prediction_file = home_address + prediction_url
         pretrain_labels = None
 
-    # UNDER CONSTRUCTION
     if pretrain:
+        # because after the prediction file has been produced in Coco
+        # We have to guarantee that the url is valid, so wait for 1 second
         pretrain_labels, prediction_file = load_coco()
-        #print(prediction_file)
-        time.sleep(2)
+        time.sleep(1)
         truth_file = None
 
-
-    #print(truth_file, prediction_file)
 
     if not addition:
         # init Eval_Report object
@@ -55,18 +61,15 @@ def load_backend(prediction=False, pretrain=False, addition=False):
     return
 
 def load_coco():
-    # UNDER CONSTRUCTION
-    # #test.post_train()
-    #     #test.get_status()
-    #     #test.post_predict()
-    #
-    #     #pretrain_form = EvalPretrainFile.objects.last()
-    #     #print(pretrain_form)
-    #     #print(pretrain_form.tokenization)
-    #     #print(pretrain_form.pretrain_file.url)
-    #     #print(pretrain_form.description)
-    #     #print(pretrain_form.n_classes)
-    #     #print(pretrain_form.pretrain_file.name)
+    '''
+        After uploading/submitting the pretrain files and models for Coco
+        First do a Post/Train request to upload the file to Coco and start Training
+        Check the Status every two seconds
+        After training is finished, get the prediction
+    :return: coco_model.train_labels: list of classification labels for loading reports
+             coco_model.predict_file: prediction url
+    '''
+
     coco_model = Coco_request()
     coco_model.post_train()
     coco_model.check_status()
@@ -76,8 +79,8 @@ def load_coco():
 
 def set_report_title():
     '''
-
-    :return: set up the context dictionary for the report titile
+    set up the context dictionary for the report titile
+    :return: dictionary for context
     '''
     if EVAL_REPORT.predict:
         return {'title': 'Report with a Prediction File'}
@@ -88,6 +91,7 @@ def set_report_title():
 
 def home(request):
     '''
+    Load Home Page
     :param request:
     :return: Home page
     '''
@@ -97,6 +101,7 @@ def home(request):
 
 def evaluate(request):
     '''
+    Load Evaluate Home page
     :param request:
     :return: evaluate home page
     '''
@@ -107,6 +112,7 @@ def eval_upload_prediction(request):
     '''
         After clicking with a prediction file
         upload truth file and prediction file
+        Loading the Evaluation Report model
         redirect to the report page
     :param request:
     :return:
@@ -118,7 +124,7 @@ def eval_upload_prediction(request):
         if form.is_valid():
             form.save()
             # Evaluate the model
-            load_backend(prediction=True)
+            load_evaluate(prediction=True)
             return redirect('platform-evaluate-report')
 
     else: # if request is get
@@ -130,8 +136,9 @@ def eval_upload_prediction(request):
 
 def eval_report_overview(request):
     '''
-        Find the two uploaded files and call the Overview Class from the backend
-        Calculate the overview and produce the confusion matrix png
+        Generate the classification reports by getting the data from the EVAL_REPORT object
+        predict use to tell the front end which type of table needs to generate
+        if there is additional predicted file, it would also tell the front end to make the second table
     :param request:
     :return: render request to the overview page
     '''
@@ -155,9 +162,9 @@ def eval_report_overview(request):
 
 def eval_report_confusion(request):
     '''
-        Since the overview page would go first,
-        Overview page would create the confusion matrix png in the static folder
-        Call it in the html directly
+        Generate the confusion matrix in count by getting the labels and data
+        predict use to tell the front end which type of table needs to generate
+        if there is additional predicted file, it would also tell the front end to make the second chart
     :param request:
     :return: render request to the confusion matrix page
     '''
@@ -176,9 +183,9 @@ def eval_report_confusion(request):
 
 def eval_report_confusion_proportion(request):
     '''
-        Since the overview page would go first,
-        Overview page would create the confusion matrix proportion png in the static folder
-        Call it in the html directly
+        Generate the confusion matrix in percentage by getting the labels and data
+        predict use to tell the front end which type of table needs to generate
+        if there is additional predicted file, it would also tell the front end to make the second chart
     :param request:
     :return: render request to the confusion matrix page
     '''
@@ -196,9 +203,11 @@ def eval_report_confusion_proportion(request):
 
 def eval_report_threshold(request):
     '''
-
+        Generate the threshold analysis and return the threshold table, threshold_list and accuracy_list for chart
+        predict use to tell the front end which type of table needs to generate
+        if there is additional predicted file, it would also tell the front end to make the second table
     :param request:
-    :return:
+    :return: render request to the threshold analysis page
     '''
     context = set_report_title()
 
@@ -215,9 +224,11 @@ def eval_report_threshold(request):
 
 def eval_report_error(request):
     '''
-
+        Generate the error analysis and return the error table
+        predict use to tell the front end which type of table needs to generate
+        if there is additional predicted file, it would also tell the front end to make two more column
     :param request:
-    :return:
+    :return: render request to the error analysis page
     '''
     context = set_report_title()
 
@@ -230,7 +241,8 @@ def eval_report_error(request):
 
 def eval_report_upload(request):
     '''
-
+        Upload another predicted file to the backend
+        It would load the backend again and use the previous truth file and predicted file
     :param request:
     :return:
     '''
@@ -242,7 +254,7 @@ def eval_report_upload(request):
         if form.is_valid():
             form.save()
             # Evaluate the model
-            load_backend(prediction=True, addition=True)
+            load_evaluate(prediction=True, addition=True)
             return redirect('platform-evaluate-report')
 
     else: # if request is get
@@ -266,7 +278,7 @@ def eval_upload_pretrain(request):
         form = EvalPretrainForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            load_backend(pretrain=True)
+            load_evaluate(pretrain=True)
             return redirect('platform-evaluate-report')
         pass
     else: # if request is get

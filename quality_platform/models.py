@@ -3,13 +3,22 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class EvalPredFile(models.Model):
+    '''
+        Django Model for Uploading predicted files
+    '''
     truth_file = models.FileField(upload_to='evaluate/truth_file/')
     prediction_file = models.FileField(upload_to='evaluate/predict_file/')
 
 class EvalAddFile(models.Model):
+    '''
+        Django Model for Uploading Addition Predicted files
+    '''
     addition_pred_file = models.FileField(upload_to='evaluate/addition_pred_file/')
 
 class EvalPretrainFile(models.Model):
+    '''
+        Django Model for Uploading pretrain file and the model requirement to Coco
+    '''
     pretrain_file = models.FileField(upload_to='evaluate/pretrain_file/')
 
     description = models.TextField(default="getting-started")
