@@ -57,3 +57,13 @@ The reports contain four tabs:
 * Threshold Analysis: analyze the change of accuracy by increasing the threshold in 5% every time
 * Error Analysis: a table containing wrong predicted data and its content
 * Upload Another Predicted File (for evaluating with a predicted file mode only)
+
+## What is left to be developed 
+
+* Take the server running on local machine to run on cloud.
+* Stressing the model with different test set.
+* Retrain a new model after modification on weights and parameters.
+
+## Other notes
+
+
