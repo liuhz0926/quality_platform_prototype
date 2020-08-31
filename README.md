@@ -73,6 +73,10 @@ The reports contain four tabs:
 
 ## Other notes
 
+#### Predecited Mode:
+
+* Upload the second predicted model: after upload the second predicted model, Model 1 in the report is the first uploaded model, Model 2 is the second. Here, we can still upload another predicted file (Model 3, i.e.). But the report would only compare two models, and Model 3 would replace Model 2 and become the new Model 2 in the report. 
+
 #### Pretrain Mode:
 * Currently, since the app hasn't run on the cloud successfully, in Coco_request.py, we are using the zip file in this git (URL: https://github.com/liuhz0926/quality_platform_prototype/raw/master/uploads/evaluate/pretrain_file/archive.zip). Although we have to upload the file as well when we submit the model, the Coco API is still reading this URL from the git since Coco API cannot read a local path. Once the app is available on the server, the dataset_url needs to be updated to the new path.
 
