@@ -35,8 +35,6 @@ First, upload a zip file with training, validation, and test dataset, and select
 
 Link of Symanto Quality Platform API (Coco Server): http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/docs
 
-The authorization key: QhV37mPdcz
-
 ### Evaluation Reports
 
 The reports contain four tabs:
