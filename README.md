@@ -34,6 +34,7 @@ In the reports, the user can reupload another predicted file from a different mo
 First, upload a zip file with training, validation, and test dataset, and select the language model to train. The zip file would be uploaded to Coco server and start to train. After training, Coco will produce the predicted file. The backend will generate the evaluation reports based on the predicted file.
 
 Link of Symanto Quality Platform API (Coco Server): http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/docs
+
 The authorization key: QhV37mPdcz
 
 ### Evaluation Reports
