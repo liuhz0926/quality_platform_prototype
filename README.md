@@ -74,6 +74,6 @@ The reports contain four tabs:
 ## Other notes
 
 * Pretrain Mode:
-- Currently, since the app hasn't run on the cloud successfully, in Coco_request.py, we are using the zip file in this git (URL: https://github.com/liuhz0926/quality_platform_prototype/raw/master/uploads/evaluate/pretrain_file/archive.zip). Although we have to upload the file as well when we submit the model, the Coco API is still reading this URL from the git since Coco API cannot read a local path. Once the app is available on the server, the dataset_url needs to be updated to the new path.
+** Currently, since the app hasn't run on the cloud successfully, in Coco_request.py, we are using the zip file in this git (URL: https://github.com/liuhz0926/quality_platform_prototype/raw/master/uploads/evaluate/pretrain_file/archive.zip). Although we have to upload the file as well when we submit the model, the Coco API is still reading this URL from the git since Coco API cannot read a local path. Once the app is available on the server, the dataset_url needs to be updated to the new path.
 
-- To upload the model, right now, we set in the default model requirement for Coco. Since Coco is using a small server, for now, other models may crash the API. In that situation, we might need to reload the API.
+** To upload the model, right now, we set in the default model requirement for Coco. Since Coco is using a small server, for now, other models may crash the API. In that situation, we might need to reload the API.
