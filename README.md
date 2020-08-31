@@ -63,6 +63,7 @@ The reports contain four tabs:
 * Take the server running on local machine to run on cloud.
 * Stressing the model with different test set.
 * Retrain a new model after modification on weights and parameters.
+* User group management and Admin management. This can be done in Django.
 
 ## Other notes
 
