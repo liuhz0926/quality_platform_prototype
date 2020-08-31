@@ -17,6 +17,18 @@ Language: Python 3
 
 Platform: Django 3.1
 
+## Package install
+
+Run the following code in command line
+
+pip3 install -r requirements.txt
+
+## Run server
+
+Run the following code in command line
+
+python3 manage.py runserver
+
 ## Evaluate
 
 To evaluate user's models, there are two options:
