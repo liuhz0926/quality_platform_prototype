@@ -1,6 +1,6 @@
 # Symanto Quality Platform Prototype
 
-Author: Gary Liu (zl2889@columbia.edu), Huazhang Liu (hl3338@columbia.edu)
+Authors: Gary Liu (zl2889@columbia.edu), Huazhang Liu (hl3338@columbia.edu)
 
 This Quality Platform project is designed to unify and homogenize the evaluation of the language model. The project uses the Django framework. 
 
