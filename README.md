@@ -24,7 +24,7 @@ Platform: Django 3.1
 Run the following code in command line
 
 ```sh
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Run server
