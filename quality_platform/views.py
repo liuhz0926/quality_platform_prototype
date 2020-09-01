@@ -4,7 +4,7 @@ from .forms import EvalFileForm, EvalAddFileForm, EvalPretrainForm
 from .models import EvalPredFile, EvalAddFile, EvalPretrainFile
 from .backend.Main import Eval_Report
 from .backend.evaluate.Coco_Request import Coco_request
-
+import os
 
 EVAL_REPORT = Eval_Report()
 
@@ -26,8 +26,8 @@ def load_evaluate(prediction=False, pretrain=False, addition=False):
         uploaded_files = EvalPredFile.objects.last()
         truth_url = uploaded_files.truth_file.url
         prediction_url = uploaded_files.prediction_file.url
-        truth_file = home_address + truth_url
-        prediction_file = home_address + prediction_url
+        truth_file = os.path.expanduser(home_address + truth_url)
+        prediction_file = os.path.expanduser(home_address + prediction_url)
         pretrain_labels = None
 
     if pretrain:

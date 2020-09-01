@@ -10,7 +10,7 @@ HEADERS = {
     'SYMANTO_QP_ACCESS_TOKEN': 'QhV37mPdcz',
 }
 
-
+# Need to change thr url to the cloud
 HOME_URL = "localhost:8000"
 HOME_ADDRESS = '~/quality_platform_prototype/'
 
