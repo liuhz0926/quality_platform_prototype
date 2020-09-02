@@ -100,7 +100,7 @@ class Threshold_analysis:
         accuracy_list = []
         accuracy_list1 = []
         column = self.tfile.iloc[:,self.r_col]
-        labels = column.value_counts().keys()
+        labels = sorted(column.value_counts().keys())
         labels = int(1/len(labels)*100)
         firstrun = True
         for i in range(labels,96,5):

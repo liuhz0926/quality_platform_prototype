@@ -106,8 +106,8 @@ class Overview:
         result = []
         valuecount = column.value_counts()
 
-        for label in valuecount.keys():
-            result.append("Class: " + str(label) + ", Count: " + str(valuecount[label]) + ", Percentage: " + str(valuecount[label]/total) + "\n")
+        for label in sorted(valuecount.keys()):
+            result.append("Class: " + str(label) + ", Count: " + str(valuecount[label]) + ", Percentage: " + str(round(valuecount[label]/total * 100, 2)) + "%\n")
 
         return result
 
@@ -120,7 +120,7 @@ class Overview:
 
         actual = self.tfile.iloc[:,self.r_col]
         predict = self.pfile.iloc[:,self.r_col]
-        labels = list(actual.unique())
+        labels = sorted(list(actual.unique()))
         cm = confusion_matrix(actual,predict,labels=labels)
         result = []
         if normalize:
@@ -142,7 +142,7 @@ class Overview:
         '''
         actual = self.tfile.iloc[:, self.r_col]
         predict = self.pfile.iloc[:, self.r_col]
-        labels = actual.unique()
+        labels = sorted(actual.unique())
         report = classification_report(actual,predict,target_names=labels,output_dict=True)
 
         return report
