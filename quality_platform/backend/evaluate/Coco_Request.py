@@ -12,7 +12,7 @@ HEADERS = {
 
 # Need to change thr url to the cloud
 HOME_URL = "localhost:8000"
-HOME_ADDRESS = '~/quality_platform_prototype/'
+HOME_ADDRESS = '~/quality_platform_prototype'
 
 class Coco_request:
     def __init__(self):
@@ -28,7 +28,7 @@ class Coco_request:
 
         # get the labels from the train file
         zip_directory = HOME_ADDRESS + self.pretrain_form.pretrain_file.url
-        unzip_directory = HOME_ADDRESS + 'uploads/evaluate/pretrain_file/'
+        unzip_directory = HOME_ADDRESS + '/uploads/evaluate/pretrain_file/'
         unzip(zip_directory, unzip_directory)
         self.train_labels = get_labels(unzip_directory + 'train.tsv')
 
@@ -100,7 +100,7 @@ class Coco_request:
         :return:
         '''
 
-        self.test_file = os.path.expanduser(HOME_ADDRESS + 'uploads/evaluate/pretrain_file/test.tsv')
+        self.test_file = os.path.expanduser(HOME_ADDRESS + '/uploads/evaluate/pretrain_file/test.tsv')
 
         url = 'http://symanto-pastaepizza.northeurope.cloudapp.azure.com:8000/predict'
 
@@ -114,7 +114,7 @@ class Coco_request:
                 files={"dataset": ('text.tsv', f, "text/tsv")})
 
         self.predict_file = response.json()['url']
-        print(self.predict_file)
+        print('Predict URL:',self.predict_file)
 
 
     def check_status(self):
