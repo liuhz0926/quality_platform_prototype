@@ -19,7 +19,11 @@ def load_evaluate(prediction=False, pretrain=False, addition=False):
     :param addition: boolean
     :return:
     '''
-    home_address = '~/quality_platform_prototype/'
+
+    # This address needs to be modified if change the root folder
+    # Now this app is under user folder
+    # ~ is the user folder in MacOS
+    home_address = '~/quality_platform_prototype'
 
     # get the last uploaded files
     if prediction:
