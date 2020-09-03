@@ -72,11 +72,14 @@
                     },
                     xAxis: {
                         categories: {{ confusion_labels|safe }},
-                        title: 'Predicted Label'
-                    },
+                        title: {
+                            text: 'Predictions'
+                    }},
                     yAxis: {
                         categories: {{ confusion_labels|safe }},
-                        title: 'True Label',
+                        title: {
+                            text: 'Observations',
+                        },
                         reversed: true
                     },
                     colorAxis: {
@@ -95,7 +98,7 @@
 
                     tooltip: {
                         formatter: function () {
-                            return '<b>' + getPointCategoryName(this.point, 'x') + '</b> is predicted as <br><b>' + getPointCategoryName(this.point, 'y') +'</b> for <br><b>' +
+                            return '<b>' + getPointCategoryName(this.point, 'y') + '</b> is predicted as <br><b>' + getPointCategoryName(this.point, 'x') +'</b> for <b>' +
                                 this.point.value + '</b> times<br><b>' + '</b>';
                         }
                         },
@@ -150,11 +153,14 @@
                         },
                         xAxis: {
                             categories: {{ add_confusion_labels|safe }},
-                            title: 'Predicted Label'
-                        },
+                            title: {
+                                text: 'Predictions'
+                            }},
                         yAxis: {
                             categories: {{ add_confusion_labels|safe }},
-                            title: 'True Label',
+                            title: {
+                                text: 'Observations',
+                            },
                             reversed: true
                         },
                         colorAxis: {
@@ -173,7 +179,7 @@
 
                         tooltip: {
                             formatter: function () {
-                                return '<b>' + getPointCategoryName(this.point, 'x') + '</b> is predicted as <br><b>' + getPointCategoryName(this.point, 'y') +'</b> for <br><b>' +
+                                return '<b>' + getPointCategoryName(this.point, 'y') + '</b> is predicted as <br><b>' + getPointCategoryName(this.point, 'x') +'</b> for <b>' +
                                     this.point.value + '</b> times<br><b>' + '</b>';
                             }
                             },
@@ -212,11 +218,6 @@
         </figure>
 
     </div>
-
-
-
-
-
 
 
 {% endblock content %}

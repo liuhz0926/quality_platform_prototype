@@ -127,7 +127,7 @@ class Overview:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
             for i in range(len(cm)):
                 for j in range(len(cm[i])):
-                    result.append([j, i, round(cm[i][j],4)])
+                    result.append([j, i, round(cm[i][j] * 100, 2)])
         else:
             for i in range(len(cm)):
                 for j in range(len(cm[i])):
